@@ -4,7 +4,7 @@ const app = express()
 console.log("The start of something beautiful")
 
 app.get('/', function (req, res) {
-  res.send('Hello World')
+  res.send('Mohammed is gay')
 })
 
 app.listen(3000)
