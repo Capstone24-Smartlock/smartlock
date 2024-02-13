@@ -1,5 +1,7 @@
-const Gpio = require("onoff").Gpio
+const rpio = require("rpio")
 
-var motor = new Gpio(25, "output")
+var motor = rpio.open(25, rpio.OUTPUT, rpio.LOW)
 
-motor.writeSync(1)
+rpio.write(25, rpio.HIGH)
+
+setInterval(function() {}, 1000)
