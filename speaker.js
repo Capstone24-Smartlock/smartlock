@@ -1,12 +1,8 @@
-const Gpio = require('onoff').Gpio
-const speaker = new Gpio(25, "out")
+const Gpio = require("pigpio").Gpio
 
-setInterval(function() {
-    let speakerValue = speaker.readSync()
-    if (speakerValue == 0) {
-        speaker.writeSync(1)
-    } else {
-        speaker.writeSync(0)
-    }
-    console.log(speakerValue)
-}, 1000)
+const speaker = new Gpio(25, {mode: Gpio.OUTPUT})
+
+console.log("Frequency: " + speaker.getPwmFrequency())
+console.log("Range: " + speaker.getPwmRange())
+
+speaker.pwmWrite(0)
