@@ -1,8 +1,7 @@
-const Gpio = require("pigpio").Gpio
+const Gpio = require("onoff").Gpio
 
-const speaker = new Gpio(25, {mode: Gpio.OUTPUT})
+const speaker = new Gpio(25, out)
 
-console.log("Frequency: " + speaker.getPwmFrequency())
-console.log("Range: " + speaker.getPwmRange())
+speaker.writeSync(1)
 
-speaker.pwmWrite(0)
+while (true) {}
