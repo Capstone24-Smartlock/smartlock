@@ -15,7 +15,7 @@ app.get("/log(.html)?", function(req, res) {
 })
 
 app.post("^/$|/index(.html)?", function(req, res) {
-  console.log(req)
+  console.log(req.body)
 })
 
 app.listen(8080, function() {
