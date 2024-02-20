@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Smart Lock</title>
+  <link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+  <div id="sidepanel">
+    <svg id="battery" version="1.2" viewBox="-500 -500 1000 1000" xmlns="http://www.w3.org/2000/svg">
+      <circle id="power" cx="0" cy="0" r="425" stroke-width="75px" stroke="#5BC236" stroke-linecap="round" fill="none" transform="rotate(-90) scale(1, -1)"/>
+      <text id="powertext" x="0" y="0" text-anchor="middle" dominant-baseline="middle" style="font: bold 200px comic-sans">100%</text>
+    </svg>
+    <a href="./log/log.html" target="_self"><img id="log" src="./log.png"/></a>
+  </div>
+  <div id="coverpanel"></div>
+  <svg id="burger" version="1.2" viewBox="0 0 100 80" xmlns="http://www.w3.org/2000/svg" fill="#808080">
+    <rect width="100" height="20" rx="10"></rect>
+    <rect y="30" width="100" height="20" rx="10"></rect>
+    <rect y="60" width="100" height="20" rx="10"></rect>
+  </svg>
+  <svg id="box" version="1.2" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="500" cy="500" r="490" stroke="#d3d3d3" stroke-width="10" fill="#F1F1F1"/>
+    <path id="shaft" d="M 350 800 V 350 a 150 150 0 0 1 300 0 v 100" stroke-width="60" stroke="#A9A9A9" fill="none" stroke-linecap="round">
+      <animateMotion dur="0.1s" path="m 0 0 v -130" begin="indefinite" fill="freeze"/>
+      <animateMotion dur="0.1s" path="m 0 -130 v 130" begin="indefinite" fill="freeze"/>
+    </path>
+    <rect x="250" y="400" width="500" height="500" rx="30" fill="#818589"/>
+    <circle id="unlock" cx="500" cy="500" r="490" stroke="none" stroke-width="0" fill="black"/>
+  </svg>
+  <script src="script.js"></script>
+</body>
+
+</html>

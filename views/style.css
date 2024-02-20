@@ -1,0 +1,81 @@
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0 0 0 0;
+    padding: 5px 5px 5px 5px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+#box {
+    width: 20%;
+    height: auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#burger {
+    width: 30px;
+    height: auto;
+    cursor: pointer;
+}
+
+#shaft {
+    transform: translate(0, 0);
+    transition: transform 1s ease-in;
+}
+
+#unlock {
+    opacity: 0%;
+    cursor: pointer;
+}
+
+#sidepanel {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    left: 0;
+    background-color: #B8B8B8;
+    overflow-x: hidden;
+    padding-top: 10px;
+    transition: 0.5s;
+    box-shadow: 25px 15px 10px #707070;
+}
+
+#coverpanel {
+    z-index: 1;
+    background-color: #E0E0E0;
+    opacity: 50%;
+    width: 0;
+    height: 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+#sidepanel > * {
+    margin-right: auto;
+    margin-left: auto;
+    text-align:center;
+    display: block;
+}
+
+#battery {
+    width: 70%;
+}
+
+#powertext {
+    user-select: none;
+}
+
+#log {
+    width: 70%;
+    cursor: pointer;
+    margin-top: 10px;
+}

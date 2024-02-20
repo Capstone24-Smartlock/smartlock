@@ -1,0 +1,32 @@
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0 0 0 0;
+    padding: 5px 5px 5px 5px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+#back {
+    width: 2%;
+}
+
+#log {
+    width: 100%;
+    min-height: 100%;
+    display: grid;
+    grid-template-columns: auto;
+    padding-top: 10px;
+}
+
+.event {
+    display: grid;
+    grid-template-columns: 1fr 1fr 5fr;
+}
+
+.event > * {
+    padding-left: 2px;
+    border: 1px solid black;
+}

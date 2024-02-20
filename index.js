@@ -1,10 +1,19 @@
+const path = require("path")
 const express = require('express')
 const app = express()
 
 console.log("The start of something beautiful")
 
-app.get('/', function (req, res) {
-  res.send('Mohammed is gay')
+app.use(express.static("views"))
+
+app.get('/', function(req, res) {
+  res.sendFile(path.join(__dirname, "/views/index.html"))
 })
 
-app.listen(3000)
+app.get("/log.html", function(req, res) {
+  res.sendFile(path.join(__dirname, "views/log/log.html"))
+})
+
+app.listen(3000, function() {
+  console.log("Let's go")
+})
