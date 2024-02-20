@@ -6,11 +6,11 @@ console.log("The start of something beautiful")
 
 app.use(express.static("views"))
 
-app.get('/', function(req, res) {
+app.get('^/$|/index(.html)?', function(req, res) {
   res.sendFile(path.join(__dirname, "/views/index.html"))
 })
 
-app.get("/log.html", function(req, res) {
+app.get("/log(.html)?", function(req, res) {
   res.sendFile(path.join(__dirname, "views/log/log.html"))
 })
 
