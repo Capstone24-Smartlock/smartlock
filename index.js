@@ -2,8 +2,6 @@ const path = require("path")
 const express = require('express')
 const app = express()
 
-console.log("The start of something beautiful")
-
 app.use(express.static("views"))
 
 app.get("^/$|/index(.html)?", function(req, res) {
