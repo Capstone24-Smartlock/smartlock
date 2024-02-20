@@ -20,6 +20,19 @@ unlock.addEventListener("click", function() {
         shaft.querySelectorAll("animateMotion")[1].beginElement()
     }
     locked = !locked
+    fetch("/", {
+        method: "POST",
+        headers: {
+            "content-type": "application/json",
+        },
+        body: JSON.stringify({
+            req: "unlock"
+        })
+    }).then(function(res) {
+        console.log(res.json())
+    }).catch(function(err) {
+        console.log(err)
+    })
 })
 
 burger.addEventListener("click", function() {
