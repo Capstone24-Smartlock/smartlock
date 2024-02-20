@@ -14,6 +14,6 @@ app.get("/log.html", function(req, res) {
   res.sendFile(path.join(__dirname, "views/log/log.html"))
 })
 
-app.listen(3000, function() {
+app.listen(8080, function() {
   console.log("Let's go")
 })
