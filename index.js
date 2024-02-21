@@ -1,15 +1,17 @@
 const path = require("path")
-const dgram = require("dgram")
+const net = require("net")
 const express = require('express')
 const app = express()
 
-const battery = dgram.createSocket("udp4")
-battery.send("get battery", 8421, "127.0.0.1", function(err, bytes) {
-  if (err) {
-    console.log(err)
-  }
-  console.log(bytes)
-  battery.close()
+const battery = new net.Socket()
+battery.connect(8421, "127.0.0.1", function() {
+  battery.write("get battery")
+})
+battery.on("data", function(data) {
+  console.log(data)
+})
+battery.on("close", function() {
+  console.log("Battery connection closed")
 })
 
 app.use(express.static("views"))
