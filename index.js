@@ -1,9 +1,11 @@
 //Battery HTTP port: 8421
-
+const Gpio = require('onoff').Gpio
 const path = require("path")
 const net = require("net")
 const express = require('express')
 const app = express()
+
+const beeper = new Gpio(18, "out")
 
 app.use(express.static("views"))
 app.use(express.json())
@@ -30,6 +32,9 @@ app.get("/battery", function(req, res) {
 
 app.post("^/$|/index(.html)?", function(req, res) {
   console.log(req.body)
+  if (req.body.req == "unlock") {
+    beeper.writeSync(beeper.readSync() ^ 1)
+  }
 })
 
 app.listen(8080, function() {
