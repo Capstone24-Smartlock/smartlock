@@ -6,6 +6,16 @@ const express = require('express')
 const app = express()
 
 const beeper = new Gpio(18, "out")
+function shortBeep() {
+  let count = 0
+  const beep = setInterval(function() {
+    beeper.writeSync(beeper.readSync() ^ 1)
+    count += 1
+    if (count == 4) {
+      clearInterval(beep)
+    }
+  }, 250)
+}
 
 app.use(express.static("views"))
 app.use(express.json())
@@ -31,9 +41,8 @@ app.get("/battery", function(req, res) {
 })
 
 app.post("^/$|/index(.html)?", function(req, res) {
-  console.log(req.body)
   if (req.body.req == "unlock") {
-    beeper.writeSync(beeper.readSync() ^ 1)
+    shortBeep()
   }
 })
 
