@@ -73,7 +73,7 @@ function getPowerLevel() {
     })
 }
 
-document.onload(function(eve) {
+window.addEventListener("load", function() {
     getPowerLevel()
 })
 
