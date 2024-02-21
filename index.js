@@ -22,7 +22,7 @@ app.get("/battery", function(req, res) {
     battery.write("get battery")
   })
   battery.on("data", function(data) {
-    let level = Math.ceil(parseFloat(data.toString().split("battery: ")[0])).toString()
+    let level = Math.ceil(parseFloat(data.toString().split(" ")[1])).toString()
     res.send(level)
   })
 })
