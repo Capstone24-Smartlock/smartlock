@@ -46,6 +46,7 @@ app.get("/battery", function(req, res) {
 
 app.post("^/$|/index(.html)?", function(req, res) {
   if (req.body.req == "unlock") {
+    console.log("Beep")
     shortBeep()
   }
 })
