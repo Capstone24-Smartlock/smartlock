@@ -3,8 +3,6 @@ const net = require("net")
 const express = require('express')
 const app = express()
 
-const battery = new net.Socket()
-
 app.use(express.static("views"))
 app.use(express.json())
 
@@ -17,6 +15,7 @@ app.get("/log(.html)?", function(req, res) {
 })
 
 app.get("/battery", function(req, res) {
+  const battery = new net.Socket()
   battery.connect(8423, "127.0.0.1", function() {
     console.log("Battery connected")
     battery.write("get battery")
