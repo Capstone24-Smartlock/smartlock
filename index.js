@@ -17,7 +17,6 @@ app.get("/log(.html)?", function(req, res) {
 app.get("/battery", function(req, res) {
   const battery = new net.Socket()
   battery.connect(8423, "127.0.0.1", function() {
-    console.log("Battery connected")
     battery.write("get battery")
   })
   battery.on("data", function(data) {
