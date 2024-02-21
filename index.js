@@ -9,7 +9,7 @@ battery.connect(8423, "127.0.0.1", function() {
   battery.write("get battery")
 })
 battery.on("data", function(data) {
-  console.log(data)
+  console.log(buffer.toString(data))
 })
 battery.on("close", function() {
   console.log("Battery connection closed")
