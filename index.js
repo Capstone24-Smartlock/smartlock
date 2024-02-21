@@ -38,7 +38,7 @@ app.get("/battery", function(req, res) {
     battery.write("get battery")
   })
   battery.on("data", function(data) {
-    let level = parseFloat(data.toString().split(" ")[1])/100
+    let level = (parseFloat(data.toString().split(" ")[1])/100).toString()
     res.send(level)
     battery.destroy()
   })
