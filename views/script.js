@@ -69,7 +69,7 @@ setInterval(function() {
         return res.text()
     }).then(function(text) {
         console.log(text)
-        setPower(parseInt(text/100))
+        setPower(parseInt(text)/100)
         return
     })
 }, 10000)
