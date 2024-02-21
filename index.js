@@ -4,7 +4,7 @@ const express = require('express')
 const app = express()
 
 const battery = new net.Socket()
-battery.connect(8421, "127.0.0.1", function() {
+battery.connect(8423, "127.0.0.1", function() {
   console.log("Battery connected")
   battery.write("get battery")
 })
