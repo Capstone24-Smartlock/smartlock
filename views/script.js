@@ -68,7 +68,7 @@ function getPowerLevel() {
     fetch("/battery").then(function(res) {
         return res.text()
     }).then(function(text) {
-        setPower(Math.floor(parseFloat(text)*100))
+        setPower(Math.floor(parseFloat(text)*100)/100)
         return
     })
 }
