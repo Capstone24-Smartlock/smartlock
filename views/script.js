@@ -63,3 +63,11 @@ function setPower(percentage) {
         power.style.stroke = "#ffe200"
     }
 }
+
+setInterval(function() {
+    fetch("/battery").then(function(res) {
+        return res.text()
+    }).then(function(text) {
+        console.log(text)
+    })
+}, 10000)

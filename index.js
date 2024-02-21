@@ -4,16 +4,6 @@ const express = require('express')
 const app = express()
 
 const battery = new net.Socket()
-battery.connect(8423, "127.0.0.1", function() {
-  console.log("Battery connected")
-  battery.write("get battery")
-})
-battery.on("data", function(data) {
-  console.log(data.toString())
-})
-battery.on("close", function() {
-  console.log("Battery connection closed")
-})
 
 app.use(express.static("views"))
 app.use(express.json())
@@ -24,6 +14,17 @@ app.get("^/$|/index(.html)?", function(req, res) {
 
 app.get("/log(.html)?", function(req, res) {
   res.sendFile(path.join(__dirname, "views/log/log.html"))
+})
+
+app.get("/battery", function(req, res) {
+  battery.connect(8423, "127.0.0.1", function() {
+    console.log("Battery connected")
+    battery.write("get battery")
+  })
+  battery.on("data", function(data) {
+    let level = Math.ceil(parseFloat(data.toString().split("battery: ")[0])).toString()
+    res.send(level)
+  })
 })
 
 app.post("^/$|/index(.html)?", function(req, res) {
