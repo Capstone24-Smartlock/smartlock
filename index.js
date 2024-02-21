@@ -5,16 +5,20 @@ const net = require("net")
 const express = require('express')
 const app = express()
 
+function sleep(ms) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
+
 const beeper = new Gpio(18, "out")
-function shortBeep() {
-  let count = 0
-  const beep = setInterval(function() {
-    beeper.writeSync(beeper.readSync() ^ 1)
-    count += 1
-    if (count == 4) {
-      clearInterval(beep)
-    }
-  }, 250)
+async function shortBeep() {
+  for(let i = 0; i < 2; i++) {
+    beeper.writeSync(1)
+    await sleep(100)
+    beeper.writeSync(0)
+    await sleep(50)
+  }
 }
 
 app.use(express.static("views"))
