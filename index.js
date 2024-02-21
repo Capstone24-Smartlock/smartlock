@@ -1,3 +1,5 @@
+//Battery HTTP port: 8421
+
 const path = require("path")
 const net = require("net")
 const express = require('express')
