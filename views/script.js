@@ -16,24 +16,24 @@ var locked = true
 unlock.addEventListener("click", function() {
     if (locked) {
         shaft.querySelectorAll("animateMotion")[0].beginElement()
-
-        fetch("/", {
-            method: "POST",
-            headers: {
-                "content-type": "application/json",
-            },
-            body: JSON.stringify({
-                req: "unlock"
-            })
-        }).then(function(res) {
-            console.log(res.json())
-        }).catch(function(err) {
-            console.log(err)
-        })
     } else {
         shaft.querySelectorAll("animateMotion")[1].beginElement()
     }
     locked = !locked
+
+    fetch("/", {
+        method: "POST",
+        headers: {
+            "content-type": "application/json",
+        },
+        body: JSON.stringify({
+            req: locked ? "lock" : "unlock"
+        })
+    }).then(function(res) {
+        console.log(res.json())
+    }).catch(function(err) {
+        console.log(err)
+    })
 })
 
 burger.addEventListener("click", function() {

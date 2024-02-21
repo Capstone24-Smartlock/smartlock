@@ -1,5 +1,5 @@
 //Battery HTTP port: 8421
-const Gpio = require('onoff').Gpio
+const Gpio = require("pigpio").Gpio
 const path = require("path")
 const net = require("net")
 const express = require('express')
@@ -11,15 +11,9 @@ function sleep(ms) {
   });
 }
 
-const beeper = new Gpio(18, "out")
-async function shortBeep() {
-  for(let i = 0; i < 2; i++) {
-    beeper.writeSync(1)
-    await sleep(100)
-    beeper.writeSync(0)
-    await sleep(250)
-  }
-}
+const motor = new Gpio(24, {mode: Gpio.OUTPUT})
+motor.pwmFrequency(50)
+console.log(motor.getPwmRange())
 
 app.use(express.static("views"))
 app.use(express.json())
@@ -45,9 +39,11 @@ app.get("/battery", function(req, res) {
 })
 
 app.post("^/$|/index(.html)?", function(req, res) {
-  if (req.body.req == "unlock") {
-    console.log("Beep")
-    shortBeep()
+  switch (req.body.req) {
+    case "lock":
+      console.log("Lock")
+    case "unlock":
+      console.log("Unlock")
   }
 })
 
