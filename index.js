@@ -17,7 +17,7 @@ async function shortBeep() {
     beeper.writeSync(1)
     await sleep(100)
     beeper.writeSync(0)
-    await sleep(50)
+    await sleep(250)
   }
 }
 
