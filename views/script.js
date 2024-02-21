@@ -64,12 +64,19 @@ function setPower(percentage) {
     }
 }
 
-setInterval(function() {
+function getPowerLevel() {
     fetch("/battery").then(function(res) {
         return res.text()
     }).then(function(text) {
-        console.log(text)
         setPower(parseInt(text)/100)
         return
     })
+}
+
+document.onload(function(eve) {
+    getPowerLevel()
+})
+
+setInterval(function() {
+    getPowerLevel()
 }, 10000)
