@@ -8,14 +8,14 @@ const app = express()
 
 function open() {
   raspi.init(function() {
-    const motor = pwm.SoftPWM(5)
+    const motor = new pwm.SoftPWM(5)
     motor.write(0.05)
   })
 }
 
 function close() {
   raspi.init(function() {
-    const motor = pwm.SoftPWM(5)
+    const motor = new pwm.SoftPWM(5)
     motor.write(0.1)
   })
 }
