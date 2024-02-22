@@ -1,19 +1,23 @@
 //Battery HTTP port: 8421
-const Gpio = require("pigpio").Gpio
+const raspi = require("raspi")
+const pwm = require("raspi-soft-pwm")
 const path = require("path")
 const net = require("net")
 const express = require('express')
 const app = express()
+
+raspi.init(function() {
+  const motor = new pwm.SoftPWM(5)
+  motor.write(0.05)
+  sleep(1000)
+  motor.write(0.1)
+})
 
 function sleep(ms) {
   return new Promise((resolve) => {
     setTimeout(resolve, ms);
   });
 }
-
-const motor = new Gpio(24, {mode: Gpio.OUTPUT})
-motor.pwmFrequency(50)
-console.log(motor.getPwmRange())
 
 app.use(express.static("views"))
 app.use(express.json())
