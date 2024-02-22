@@ -6,11 +6,11 @@ const net = require("net")
 const express = require('express')
 const app = express()
 
-raspi.init(function() {
+raspi.init(async function() {
   const motor = new pwm.SoftPWM(5)
   motor.write(0.05)
   console.log("0.05")
-  sleep(1000)
+  await sleep(1000)
   motor.write(0.1)
   console.log("0.1")
 })
