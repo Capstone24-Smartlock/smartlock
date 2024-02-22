@@ -13,7 +13,7 @@ function sleep(ms) {
     setTimeout(resolve, ms);
   });
 }
-async function main() {
+function main() {
   const motor = new pwm.SoftPWM(5)
 
   app.use(express.static("views"))
