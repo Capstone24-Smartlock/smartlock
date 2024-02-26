@@ -6,6 +6,14 @@ const express = require('express')
 const app = express()
 
 const motor = new Gpio(5, {mode: Gpio.OUTPUT})
+motor.pwmFrequency(50)
+
+(async function() {
+  motor.pwmWrite(13)
+  await sleep(1000)
+  motor.pwmWrite(26)
+})()
+
 
 function sleep(ms) {
   return new Promise((resolve) => {
