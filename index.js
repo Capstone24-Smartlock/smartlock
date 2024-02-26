@@ -8,11 +8,13 @@ const app = express()
 const motor = new Gpio(5, {mode: Gpio.OUTPUT})
 //motor.pwmFrequency(50)
 
-(async function() {
+async function test() {
   motor.pwmWrite(13)
   await sleep(1000)
   motor.pwmWrite(26)
-})()
+}
+
+test()
 
 
 function sleep(ms) {
