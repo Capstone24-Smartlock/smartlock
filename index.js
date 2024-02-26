@@ -5,7 +5,7 @@ const net = require("net")
 const express = require('express')
 const app = express()
 
-const motor = new Gpio(5, {mode: Gpio.OUTPUT})
+const motor = new Gpio(24, {mode: Gpio.OUTPUT})
 //motor.pwmFrequency(50)
 
 async function test() {
