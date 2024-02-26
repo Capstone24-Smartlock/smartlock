@@ -6,20 +6,16 @@ const net = require("net")
 const express = require('express')
 const app = express()
 
-function open() {
-  raspi.init(function() {
-    console.log("open")
-    const motor = new pwm.SoftPWM(5)
-    motor.write(0.05)
-  })
+const motor = new pwm.SoftPWM(5)
+
+async function open() {
+  console.log("open")
+  motor.write(0.05)
 }
 
-function close() {
-  raspi.init(function() {
-    console.log("close")
-    const motor = new pwm.SoftPWM(5)
-    motor.write(0.1)
-  })
+async function close() {
+  console.log("close")
+  motor.write(0.1)
 }
 
 function sleep(ms) {
