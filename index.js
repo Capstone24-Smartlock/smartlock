@@ -10,9 +10,9 @@ const motor = new pwm.SoftPWM(5, 50)
 
 raspi.init(async function() {
   for (let i = 0; i < 5; i++) {
-    motor.write(0.05)
+    motor.write(1)
     await sleep(1000)
-    motor.write(0.1)
+    motor.write(0)
     await sleep(1000)
   }
 })
