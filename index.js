@@ -8,17 +8,6 @@ const app = express()
 
 const motor = new pwm.SoftPWM(5, 50)
 
-async function test() {
-  for (let i = 0; i < 5; i++) {
-    motor.write(0.1)
-    await sleep(1000)
-    motor.write(0.05)
-    await sleep(1000)
-  }
-}
-
-test()
-
 function sleep(ms) {
   return new Promise((resolve) => {
     setTimeout(resolve, ms);
@@ -52,8 +41,10 @@ app.post("^/$|/index(.html)?", function(req, res) {
   switch (req.body.req) {
     case "lock":
       console.log("Lock")
+      motor.write(0.1)
     case "unlock":
       console.log("Unlock")
+      motor.write(0.05)
   }
 })
 
