@@ -1,9 +1,11 @@
 //Battery HTTP port: 8421
-const pigpio = require("pigpio")
+const Gpio = require("pigpio").Gpio
 const path = require("path")
 const net = require("net")
 const express = require('express')
 const app = express()
+
+const motor = new Gpio(5, {mode: Gpio.OUTPUT})
 
 function sleep(ms) {
   return new Promise((resolve) => {
