@@ -16,6 +16,7 @@ async function test() {
     await sleep(1000)
   }
 }
+test()
 
 function sleep(ms) {
   return new Promise((resolve) => {
