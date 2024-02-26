@@ -1,35 +1,9 @@
 //Battery HTTP port: 8421
-const raspi = require("raspi")
-const pwm = require("raspi-soft-pwm")
+const pigpio = require("pigpio")
 const path = require("path")
 const net = require("net")
 const express = require('express')
 const app = express()
-
-const motor = new pwm.SoftPWM(5)
-
-raspi.init(async function() {
-  for (let i = 0; i < 2; i++) {
-    motor.write(0.05)
-    await sleep(1000)
-    motor.write(0.1)
-    await sleep(1000)
-  }
-})
-
-async function open() {
-  console.log("open")
-  setImmediate(function() {
-    motor.write(0.05)
-  })
-}
-
-async function close() {
-  console.log("close")
-  setImmediate(function() {
-    motor.write(0.1)
-  })
-}
 
 function sleep(ms) {
   return new Promise((resolve) => {
@@ -64,10 +38,8 @@ app.post("^/$|/index(.html)?", function(req, res) {
   switch (req.body.req) {
     case "lock":
       console.log("Lock")
-      close()
     case "unlock":
       console.log("Unlock")
-      open()
   }
 })
 
