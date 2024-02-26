@@ -8,12 +8,12 @@ const app = express()
 
 const motor = new pwm.SoftPWM(5)
 
-async function open() {
+function open() {
   console.log("open")
   motor.write(0.05)
 }
 
-async function close() {
+function close() {
   console.log("close")
   motor.write(0.1)
 }
