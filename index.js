@@ -1,15 +1,18 @@
 //Battery HTTP port: 8421
-const blaster = require("pi-blaster.js")
+const raspi = require("raspi")
+const pwm = require("raspi-soft-pwm")
 const path = require("path")
 const net = require("net")
 const express = require('express')
 const app = express()
 
+const motor = new pwm.SoftPWM(5)
+
 async function test() {
   for (let i = 0; i < 5; i++) {
-    blaster.setPwm(24, 0.05)
+    motor.write(0.05)
     await sleep(1000)
-    blaster.setPwm(24, 0.1)
+    motor.write(0.1)
     await sleep(1000)
   }
 }
