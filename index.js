@@ -14,6 +14,8 @@ async function test() {
   }
 }
 
+test()
+
 function sleep(ms) {
   return new Promise((resolve) => {
     setTimeout(resolve, ms);
