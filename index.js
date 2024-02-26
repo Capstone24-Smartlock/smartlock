@@ -9,7 +9,7 @@ const app = express()
 const motor = new pwm.SoftPWM(5)
 
 raspi.init(async function() {
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 2; i++) {
     motor.write(0.05)
     await sleep(1000)
     motor.write(0.1)
@@ -19,14 +19,14 @@ raspi.init(async function() {
 
 async function open() {
   console.log("open")
-  raspi.init(async function() {
+  setImmediate(function() {
     motor.write(0.05)
   })
 }
 
 async function close() {
   console.log("close")
-  raspi.init(async function() {
+  setImmediate(async function() {
     motor.write(0.1)
   })
 }
