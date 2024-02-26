@@ -6,7 +6,7 @@ const net = require("net")
 const express = require('express')
 const app = express()
 
-const motor = new pwm.SoftPWM(5)
+const motor = new pwm.SoftPWM(5, 50)
 
 raspi.init(async function() {
   for (let i = 0; i < 5; i++) {
