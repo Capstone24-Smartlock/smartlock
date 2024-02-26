@@ -6,7 +6,7 @@ const express = require('express')
 const app = express()
 
 async function test() {
-  for (let i = 0; I < 5; i++) {
+  for (let i = 0; i < 5; i++) {
     blaster.setPwm(5, 0.05)
     await sleep(1000)
     blaster.setPwm(5, 0.1)
