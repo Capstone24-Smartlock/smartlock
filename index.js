@@ -1,5 +1,5 @@
 //Battery HTTP port: 8421
-const blaster = require("pi-blaster")
+const blaster = require("pi-blaster.js")
 const path = require("path")
 const net = require("net")
 const express = require('express')
