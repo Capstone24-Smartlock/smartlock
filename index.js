@@ -26,7 +26,7 @@ async function open() {
 
 async function close() {
   console.log("close")
-  setImmediate(async function() {
+  setImmediate(function() {
     motor.write(0.1)
   })
 }
