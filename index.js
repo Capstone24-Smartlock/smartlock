@@ -8,15 +8,25 @@ const app = express()
 
 const motor = new pwm.SoftPWM(5)
 
-async function test() {
-  for (let i = 0; i < 5; i++) {
+// async function test() {
+//   for (let i = 0; i < 5; i++) {
+//     motor.write(0.05)
+//     await sleep(1000)
+//     motor.write(0.1)
+//     await sleep(1000)
+//   }
+// }
+// test()
+
+var lock = true
+
+setInterval(function() {
+  if (lock) {
     motor.write(0.05)
-    await sleep(1000)
+  } else {
     motor.write(0.1)
-    await sleep(1000)
   }
-}
-test()
+}, 100)
 
 function sleep(ms) {
   return new Promise((resolve) => {
@@ -51,14 +61,10 @@ app.post("^/$|/index(.html)?", function(req, res) {
   switch (req.body.req) {
     case "lock":
       console.log("Lock")
-      setImmediate(async function() {
-        motor.write(0.1)
-      })
+      lock = true
     case "unlock":
       console.log("Unlock")
-      setImmediate(async function() {
-        motor.write(0.05)
-      })
+      lock = false
   }
 })
 
