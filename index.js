@@ -28,9 +28,6 @@ function sleep(ms) {
   });
 }
 
-
-const motor = new pwm.SoftPWM(5)
-
 app.use(express.static("views"))
 app.use(express.json())
 
