@@ -41,10 +41,14 @@ app.post("^/$|/index(.html)?", function(req, res) {
   switch (req.body.req) {
     case "lock":
       console.log("Lock")
-      motor.write(0.1)
+      setImmediate(function() {
+        motor.write(0.1)
+      })
     case "unlock":
       console.log("Unlock")
-      motor.write(0.05)
+      setImmediate(function() {
+        motor.write(0.05)
+      })
   }
 })
 
