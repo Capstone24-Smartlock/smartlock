@@ -12,6 +12,7 @@ async function test() {
   motor.pwmWrite(13)
   await sleep(1000)
   motor.pwmWrite(26)
+  console.log("Hey")
 }
 
 test()
