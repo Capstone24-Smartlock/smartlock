@@ -1,22 +1,18 @@
 //Battery HTTP port: 8421
-const Gpio = require("pigpio").Gpio
+const blaster = require("pi-blaster")
 const path = require("path")
 const net = require("net")
 const express = require('express')
 const app = express()
 
-const motor = new Gpio(5, {mode: Gpio.OUTPUT})
-//motor.pwmFrequency(50)
-
 async function test() {
-  motor.pwmWrite(13)
-  await sleep(1000)
-  motor.pwmWrite(26)
-  console.log("Hey")
+  for (let i = 0; I < 5; i++) {
+    blaster.setPwm(5, 0.05)
+    await sleep(1000)
+    blaster.setPwm(5, 0.1)
+    await sleep(1000)
+  }
 }
-
-test()
-
 
 function sleep(ms) {
   return new Promise((resolve) => {
