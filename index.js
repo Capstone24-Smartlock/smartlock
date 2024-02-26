@@ -6,7 +6,16 @@ const net = require("net")
 const express = require('express')
 const app = express()
 
-const motor = new pwm.SoftPWM(5, 50)
+const motor = new pwm.SoftPWM(5)
+
+async function test() {
+  for (let i = 0; i < 5; i++) {
+    motor.write(0.05)
+    await sleep(1000)
+    motor.write(0.1)
+    await sleep(1000)
+  }
+}
 
 function sleep(ms) {
   return new Promise((resolve) => {
