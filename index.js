@@ -18,12 +18,10 @@ raspi.init(async function() {
 
 async function open() {
   console.log("open")
-  motor.write(0.05)
 }
 
 async function close() {
   console.log("close")
-  motor.write(0.1)
 }
 
 function sleep(ms) {
