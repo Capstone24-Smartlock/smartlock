@@ -14,14 +14,13 @@ async function test() {
   }
 }
 
-var toggle = true
+var open = true
 setInterval(function() {
-  if (toggle) {
+  if (open) {
     gpio.open()
   } else {
     gpio.close()
   }
-  toggle = !toggle
 }, 1000)
 
 function sleep(ms) {
@@ -57,10 +56,10 @@ app.post("^/$|/index(.html)?", function(req, res) {
   switch (req.body.req) {
     case "lock":
       console.log("Lock")
-      gpio.close()
+      open = false
     case "unlock":
       console.log("Unlock")
-      gpio.open()
+      open = true
   }
 })
 
