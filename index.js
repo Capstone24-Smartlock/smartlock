@@ -1,27 +1,31 @@
 //Battery HTTP port: 8421
 const gpio = require("./gpio.js").gpio
+const raspi = require("raspi")
+const pwm = require("raspi-soft-pwm")
 const path = require("path")
 const net = require("net")
 const express = require('express')
 const app = express()
 
-async function test() {
-  for (let i = 0; i < 5; i++) {
-    gpio.open()
-    await sleep(1000)
-    gpio.close()
-    await sleep(1000)
-  }
-}
+global.motor = new pwm.SoftPWM(5)
 
-global.open = true
-setInterval(function() {
-  if (global.open) {
-    gpio.open()
-  } else {
-    gpio.close()
-  }
-}, 1000)
+// async function test() {
+//   for (let i = 0; i < 5; i++) {
+//     gpio.open()
+//     await sleep(1000)
+//     gpio.close()
+//     await sleep(1000)
+//   }
+// }
+
+// global.open = true
+// setInterval(function() {
+//   if (global.open) {
+//     gpio.open()
+//   } else {
+//     gpio.close()
+//   }
+// }, 1000)
 
 function sleep(ms) {
   return new Promise((resolve) => {
@@ -55,12 +59,12 @@ app.get("/battery", function(req, res) {
 app.post("^/$|/index(.html)?", function(req, res) {
   switch (req.body.req) {
     case "lock":
+      global.motor.write(0.05)
       console.log("Lock")
-      global.open = false
       break
     case "unlock":
+      global.motor.write(0.1)
       console.log("Unlock")
-      global.open = true
       break
   }
   console.log(global.open)
