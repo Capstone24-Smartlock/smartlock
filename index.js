@@ -42,10 +42,13 @@ app.post("^/$|/index(.html)?", function(req, res) {
     case "lock":
       global.motor.write(0.05)
       console.log("Lock")
+      res.send("lock")
       break
     case "unlock":
       global.motor.write(0.1)
       console.log("Unlock")
+      res.send("unlock")
+
       break
   }
 })
