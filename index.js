@@ -48,7 +48,6 @@ app.post("^/$|/index(.html)?", function(req, res) {
       console.log("Unlock")
       break
   }
-  console.log(global.open)
 })
 
 app.listen(8080, function() {
