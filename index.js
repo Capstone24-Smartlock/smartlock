@@ -22,7 +22,7 @@ setInterval(function() {
     gpio.close()
   }
   toggle = !toggle
-})
+}, 1000)
 
 function sleep(ms) {
   return new Promise((resolve) => {
