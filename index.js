@@ -60,12 +60,10 @@ app.post("^/$|/index(.html)?", function(req, res) {
   switch (req.body.req) {
     case "lock":
       global.motor.write(0.05)
-      console.log("Lock")
       break
     case "unlock":
       global.motor.write(0.1)
       beep()
-      console.log("Unlock")
       break
   }
   res.send("Success")
