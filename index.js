@@ -21,6 +21,7 @@ setInterval(function() {
   } else {
     gpio.close()
   }
+  console.log(open)
 }, 1000)
 
 function sleep(ms) {
