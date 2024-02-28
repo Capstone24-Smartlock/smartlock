@@ -21,7 +21,6 @@ setInterval(function() {
   } else {
     gpio.close()
   }
-  console.log(global.open)
 }, 1000)
 
 function sleep(ms) {
@@ -58,9 +57,11 @@ app.post("^/$|/index(.html)?", function(req, res) {
     case "lock":
       console.log("Lock")
       global.open = false
+      break
     case "unlock":
       console.log("Unlock")
       global.open = true
+      break
   }
   console.log(global.open)
 })
