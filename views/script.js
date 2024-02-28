@@ -13,7 +13,7 @@ const powertext = document.getElementById("powertext")
 
 var locked = true
 
-unlock.addEventListener("click", function() {
+unlock.addEventListener("click", async function() {
     if (locked) {
         shaft.querySelectorAll("animateMotion")[0].beginElement()
     } else {
@@ -21,7 +21,7 @@ unlock.addEventListener("click", function() {
     }
     locked = !locked
 
-    fetch("/", {
+    await fetch("/", {
         method: "POST",
         headers: {
             "content-type": "application/json",
@@ -29,10 +29,6 @@ unlock.addEventListener("click", function() {
         body: JSON.stringify({
             req: locked ? "lock" : "unlock"
         })
-    }).then(function(res) {
-        console.log(res.json())
-    }).catch(function(err) {
-        console.log(err)
     })
 })
 
