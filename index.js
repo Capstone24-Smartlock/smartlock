@@ -14,14 +14,14 @@ async function test() {
   }
 }
 
-var open = true
+global.open = true
 setInterval(function() {
-  if (open) {
+  if (global.open) {
     gpio.open()
   } else {
     gpio.close()
   }
-  console.log(open)
+  console.log(global.open)
 }, 1000)
 
 function sleep(ms) {
@@ -57,10 +57,10 @@ app.post("^/$|/index(.html)?", function(req, res) {
   switch (req.body.req) {
     case "lock":
       console.log("Lock")
-      open = false
+      global.open = false
     case "unlock":
       console.log("Unlock")
-      open = true
+      global.open = true
   }
 })
 
