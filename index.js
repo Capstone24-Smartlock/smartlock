@@ -13,7 +13,16 @@ async function test() {
     await sleep(1000)
   }
 }
-test()
+
+var toggle = true
+setInterval(function() {
+  if (toggle) {
+    gpio.open()
+  } else {
+    gpio.close()
+  }
+  toggle = !toggle
+})
 
 function sleep(ms) {
   return new Promise((resolve) => {
