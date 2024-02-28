@@ -1,32 +1,19 @@
 //Battery HTTP port: 8421
-const raspi = require("raspi")
-const pwm = require("raspi-soft-pwm")
+const gpio = require("./gpio.js").gpio
 const path = require("path")
 const net = require("net")
 const express = require('express')
 const app = express()
 
-const motor = new pwm.SoftPWM(5)
-
-// async function test() {
-//   for (let i = 0; i < 5; i++) {
-//     motor.write(0.05)
-//     await sleep(1000)
-//     motor.write(0.1)
-//     await sleep(1000)
-//   }
-// }
-// test()
-
-var lock = true
-
-setInterval(function() {
-  if (lock) {
-    motor.write(0.05)
-  } else {
-    motor.write(0.1)
+async function test() {
+  for (let i = 0; i < 5; i++) {
+    gpio.open()
+    await sleep(1000)
+    gpio.close()
+    await sleep(1000)
   }
-}, 100)
+}
+test()
 
 function sleep(ms) {
   return new Promise((resolve) => {
@@ -61,10 +48,8 @@ app.post("^/$|/index(.html)?", function(req, res) {
   switch (req.body.req) {
     case "lock":
       console.log("Lock")
-      lock = true
     case "unlock":
       console.log("Unlock")
-      lock = false
   }
 })
 
