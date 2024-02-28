@@ -1,12 +1,31 @@
 //Battery HTTP port: 8421
 const raspi = require("raspi")
 const pwm = require("raspi-soft-pwm")
+const gpio = require("raspi-gpio")
 const path = require("path")
 const net = require("net")
 const express = require('express')
 const app = express()
 
 global.motor = new pwm.SoftPWM(5)
+global.beeper = new gpio.DigitalOutput(1)
+
+async function beep () {
+  for (let i = 0; i < 2; i++) {
+    global.beeper.write(1)
+    await sleep(100)
+    global.beeper.write(0)
+    await sleep(100)
+  }
+}
+
+function open() {
+  global.motor.write(0.05)
+}
+
+function close() {
+  global.motor.write(0.1)
+}
 
 function sleep(ms) {
   return new Promise((resolve) => {
@@ -45,6 +64,7 @@ app.post("^/$|/index(.html)?", function(req, res) {
       break
     case "unlock":
       global.motor.write(0.1)
+      beep()
       console.log("Unlock")
       break
   }
