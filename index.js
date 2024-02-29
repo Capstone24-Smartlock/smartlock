@@ -68,8 +68,8 @@ app.get("/battery", function(req, res) {
   })
 })
 
-app.get("/events", function(req, res) {
-  res.sendFile(__dirname, "log.json")
+app.get("/events(.html)?", function(req, res) {
+  res.send(fs.readFileSync("./log.json"))
 })
 
 app.post("^/$|/index(.html)?", function(req, res) {
