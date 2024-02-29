@@ -69,7 +69,7 @@ app.get("/battery", function(req, res) {
 })
 
 app.get("/events(.html)?", function(req, res) {
-  res.send(fs.readFileSync("./log.json"))
+  res.send(fs.readFileSync("./log.json").toString())
 })
 
 app.post("^/$|/index(.html)?", function(req, res) {
