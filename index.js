@@ -22,8 +22,6 @@ async function logEvent(date, time, event) {
   console.log("File Write Complete")
 }
 
-logEvent("1", "2", "3")
-
 async function beep () {
   for (let i = 0; i < 2; i++) {
     global.beeper.write(1)
@@ -71,12 +69,15 @@ app.get("/battery", function(req, res) {
 })
 
 app.post("^/$|/index(.html)?", function(req, res) {
-  switch (req.body.req) {
+  let data = req.body
+  switch (data.req) {
     case "lock":
       global.motor.write(0.05)
+      logEvent(data.date, data.time, data.event)
       break
     case "unlock":
       global.motor.write(0.1)
+      logEvent(data.date, data.time, data.event)
       beep()
       break
   }
