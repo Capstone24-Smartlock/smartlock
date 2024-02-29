@@ -12,9 +12,9 @@ global.motor = new pwm.SoftPWM(5)
 global.beeper = new gpio.DigitalOutput(1)
 
 async function logEvent(date, time, event) {
-  let log = fs.readFileSync("./log.json")
+  let log = fs.readFileSync("./log.json").toString()
   console.log(log)
-  log = await JSON.parse(log.toString())
+  log = await JSON.parse(log)
   log.date.push(date)
   log.time.push(time)
   log.event.push(event)
