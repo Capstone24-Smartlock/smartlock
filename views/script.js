@@ -80,11 +80,11 @@ function getDate(d) {
 
 function getTime(d) {
     let hour = d.getHours()
-    let morning = 0 <= hour <= 11
+    let morning = hour < 11
     if (hour == 0) {
         hour = 12
     } else if (hour >= 13) {
-        hour -= 1
+        hour -= 12
     }
 
     return hour + ":" + d.getMinutes().toString().padStart(2, "0") + ":" + d.getSeconds().toString().padStart(2, "0") + " " + (morning ? "AM" : "PM")
