@@ -7,26 +7,39 @@ html, body {
 
 * {
     box-sizing: border-box;
+    user-select: none;
+}
+
+table, td, th {
+    border: 1px solid;
+}
+
+table {
+    position: relative;
+    width:100%;
+}
+
+th {
+    background-color: #A9A9A9;
+    position: sticky;
+    top: 0;
+    z-index: 1;
 }
 
 #back {
     width: 2%;
 }
 
-#log {
+#wrap {
     width: 100%;
-    min-height: 100%;
-    display: grid;
-    grid-template-columns: auto;
-    padding-top: 10px;
+    height: 98%;
+    overflow: auto;
 }
 
-.event {
-    display: grid;
-    grid-template-columns: 1fr 1fr 5fr;
+#log {
+    max-height: 100%;
 }
 
-.event > * {
-    padding-left: 2px;
-    border: 1px solid black;
+#events {
+    border-collapse: collapse;
 }

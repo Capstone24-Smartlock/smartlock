@@ -10,12 +10,17 @@
 
 <body>
   <a href="/" target="_self"><img id="back" src="back.png"/></a>
-  <div id="log">
-    <div class="event">
-      <div>Date</div>
-      <div>Time</div>
-      <div>Event</div>
-    </div>
+  <div id="wrap">
+    <table id="log">
+      <thead id="header">
+        <tr>
+          <th style="width: 20%">Date</th>
+          <th style="width: 20%">Time</th>
+          <th>Event</th>
+        </tr>
+      </thead>
+      <tbody id="events"></tbody>
+    </table>
   </div>
   <script src="log.js"></script>
 </body>
