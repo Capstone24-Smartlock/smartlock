@@ -3,7 +3,7 @@ var events = document.getElementById("events")
 fetch("/events").then(function(res) {
     return res.json()
 }).then(function(data) {
-    for (i = data.date.length; i >= 0; i--) {
+    for (i = data.date.length; i > 0; i--) {
         let row = document.createElement("tr")
         let items = [data.date[i], data.time[i], data.event[i]]
         for (let s = 0; s < 3; s++) {
