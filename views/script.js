@@ -21,13 +21,18 @@ unlock.addEventListener("click", async function() {
     }
     locked = !locked
 
+    let date = new Date()
+
     await fetch("/", {
         method: "POST",
         headers: {
             "content-type": "application/json",
         },
         body: JSON.stringify({
-            req: locked ? "lock" : "unlock"
+            req: locked ? "lock" : "unlock",
+            date: getDate(date),
+            time: getTime(date),
+            event: locked ? 0 : 1
         })
     })
 })
@@ -67,6 +72,22 @@ function getPowerLevel() {
         setPower(Math.floor(parseFloat(text)*100)/100)
         return
     })
+}
+
+function getDate(d) {
+    return d.getMonth() + 1 + "/" + d.getDate() + "/" + d.getFullYear()
+}
+
+function getTime(d) {
+    let hour = d.getHours()
+    let morning = 0 <= hour <= 11
+    if (hour == 0) {
+        hour = 12
+    } else if (hour >= 13) {
+        hour -= 1
+    }
+
+    return hour + ":" + d.getMinutes().toString().padStart(2, "0") + ":" + d.getSeconds().toString().padStart(2, "0") + " " + (morning ? "AM" : "PM")
 }
 
 window.addEventListener("load", function() {

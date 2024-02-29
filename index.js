@@ -14,8 +14,15 @@ global.beeper = new gpio.DigitalOutput(1)
 console.log((new Date()).getDate())
 
 async function logEvent(date, time, event) {
-
+  let log = JSON.parse(fs.readFileSync("./log.json"))
+  log.date.push(date)
+  log.time.push(time)
+  log.event.push(event)
+  fs.writeFileSync("./log.json", JSON.stringify(log))
+  console.log("File Write Complete")
 }
+
+logEvent("1", "2", "3")
 
 async function beep () {
   for (let i = 0; i < 2; i++) {
