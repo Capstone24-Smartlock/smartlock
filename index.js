@@ -14,6 +14,7 @@ global.beeper = new gpio.DigitalOutput(1)
 console.log((new Date()).getDate())
 
 async function logEvent(date, time, event) {
+  //stupid
   let log = await JSON.parse(fs.readFileSync("./log.json"))
   log.date.push(date)
   log.time.push(time)
