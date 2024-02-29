@@ -1,7 +1,8 @@
 //Battery HTTP port: 8421
-const raspi = require("raspi")
+//const raspi = require("raspi")
 const pwm = require("raspi-soft-pwm")
 const gpio = require("raspi-gpio")
+const fs = require("fs")
 const path = require("path")
 const net = require("net")
 const express = require('express')
@@ -9,6 +10,12 @@ const app = express()
 
 global.motor = new pwm.SoftPWM(5)
 global.beeper = new gpio.DigitalOutput(1)
+
+console.log((new Date()).getDate())
+
+async function logEvent(date, time, event) {
+
+}
 
 async function beep () {
   for (let i = 0; i < 2; i++) {
