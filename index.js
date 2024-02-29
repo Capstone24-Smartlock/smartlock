@@ -53,7 +53,7 @@ app.get("^/$|/index(.html)?", function(req, res) {
 })
 
 app.get("/log(.html)?", function(req, res) {
-  res.sendFile(path.join(__dirname, "views/log/log.html"))
+  res.sendFile(path.join(__dirname, "/views/log/log.html"))
 })
 
 app.get("/battery", function(req, res) {
@@ -66,6 +66,10 @@ app.get("/battery", function(req, res) {
     res.send(level)
     battery.destroy()
   })
+})
+
+app.get("/events", function(req, res) {
+  res.sendFile(__dirname, "log.json")
 })
 
 app.post("^/$|/index(.html)?", function(req, res) {
