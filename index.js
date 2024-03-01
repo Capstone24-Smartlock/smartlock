@@ -61,6 +61,7 @@ async function getBattery(req) {
   })
   return await new Promise(function(resolve, reject) {
     battery.on("data", function(data) {
+      console.log(data)
       resolve(data)
     })
   }).then(function(data) {
