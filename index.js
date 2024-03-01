@@ -54,7 +54,7 @@ app.get("/log(.html)?", function(req, res) {
   res.sendFile(path.join(__dirname, "/views/log/log.html"))
 })
 
-async function getBattery(req) {
+async function batteryProperties(req) {
   const battery = new net.Socket()
   battery.connect(8423, "127.0.0.1", function() {
     battery.write(req)
@@ -64,33 +64,19 @@ async function getBattery(req) {
       resolve(data.toString())
     })
   }).then(function(data) {
-    return data
+    return data.split(" ")[1]
   })
 }
 
-(async function() {
-  console.log(await getBattery("get battery"))
-})()
-
-async function battery() {
-  let data = {}
-  const batteryLevel = new net.Socket()
-  battery.connect(8423, "127.0.0.1", function() {
-    battery.write("get battery")
-  })
-
+async function batteryData() {
+  return {
+    level: parseFloat(batteryProperties("get battery"))/100,
+    isCharging: batteryProperties("get battery_power_plugged") == "true",
+  }
 }
 
 app.get("/battery", async function(req, res) {
-  const battery = new net.Socket()
-  battery.connect(8423, "127.0.0.1", function() {
-    battery.write("get battery")
-  })
-  battery.on("data", function(data) {
-    let level = (parseFloat(data.toString().split(" ")[1])/100).toString()
-    res.send(level)
-    battery.destroy()
-  })
+  res.send(JSON.stringify(await batteryData()))
 })
 
 app.get("/events(.html)?", function(req, res) {
