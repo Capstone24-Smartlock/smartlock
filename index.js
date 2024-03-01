@@ -61,11 +61,10 @@ async function getBattery(req) {
   })
   return await new Promise(function(resolve, reject) {
     battery.on("data", function(data) {
-      console.log(data.toString())
-      resolve(data)
+      resolve(data.toString())
     })
   }).then(function(data) {
-    return data.toString()
+    return data
   })
 }
 
