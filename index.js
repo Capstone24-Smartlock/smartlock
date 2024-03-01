@@ -64,8 +64,8 @@ async function getBattery(req) {
       resolve(data)
     })
   }).then(function(data) {
-    return data
-  }).toString()
+    return data.toString()
+  })
 }
 
 (async function() {
