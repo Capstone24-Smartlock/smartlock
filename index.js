@@ -68,7 +68,7 @@ async function getBattery(req) {
       battery.destroy()
     })
   }).then(function(data) {
-    return data
+    return data.toString()
   })
 }
 
