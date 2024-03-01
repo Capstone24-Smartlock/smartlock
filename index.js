@@ -56,16 +56,12 @@ app.get("/log(.html)?", function(req, res) {
 
 async function getBattery(req) {
   const battery = new net.Socket()
-  await new Promise(function(resolve, reject) {
-    battery.connect(8423, "127.0.0.1", function() {
-      battery.write(req)
-      resolve()
-    })
+  battery.connect(8423, "127.0.0.1", function() {
+    battery.write(req)
   })
   return await new Promise(function(resolve, reject) {
     battery.on("data", function(data) {
       resolve(data)
-      battery.destroy()
     })
   }).then(function(data) {
     return data.toString()
