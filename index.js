@@ -54,7 +54,36 @@ app.get("/log(.html)?", function(req, res) {
   res.sendFile(path.join(__dirname, "/views/log/log.html"))
 })
 
-app.get("/battery", function(req, res) {
+async function getBattery(req) {
+  const battery = new net.Socket()
+  await new Promise(function(resolve, reject) {
+    battery.connect(8423, "127.0.0.1", function() {
+      battery.write(req)
+      resolve()
+    })
+  })
+  return await new Promise(function(resolve, reject) {
+    battery.on("data", function(data) {
+      resolve(data)
+      battery.destroy()
+    })
+  }).then(function(data) {
+    return data
+  })
+}
+
+console.log(getBattery("get battery"))
+
+async function battery() {
+  let data = {}
+  const batteryLevel = new net.Socket()
+  battery.connect(8423, "127.0.0.1", function() {
+    battery.write("get battery")
+  })
+
+}
+
+app.get("/battery", async function(req, res) {
   const battery = new net.Socket()
   battery.connect(8423, "127.0.0.1", function() {
     battery.write("get battery")
