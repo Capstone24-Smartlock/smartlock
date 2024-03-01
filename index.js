@@ -72,7 +72,9 @@ async function getBattery(req) {
   })
 }
 
-console.log(getBattery("get battery"))
+(async function() {
+  console.log(await getBattery("get battery"))
+})()
 
 async function battery() {
   let data = {}
