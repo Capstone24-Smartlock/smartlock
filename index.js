@@ -64,7 +64,7 @@ async function batteryProperties(req) {
       resolve(data.toString())
     })
   }).then(function(data) {
-    console.log(data.split(" ")[1] === "true", 1)
+    console.log(data.split(" ")[1][0] == "t", 1)
     return data.split(" ")[1]
   })
 }
@@ -72,7 +72,7 @@ async function batteryProperties(req) {
 async function batteryData() {
   return {
     level: parseFloat(await batteryProperties("get battery"))/100,
-    isCharging: await /^true$/i.test(batteryProperties("get battery_power_plugged")),
+    isCharging: await batteryProperties("get battery_power_plugged")[0] == "t",
   }
 }
 
