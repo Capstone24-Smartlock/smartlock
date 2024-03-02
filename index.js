@@ -64,7 +64,6 @@ async function batteryProperties(req) {
       resolve(data.toString())
     })
   }).then(function(data) {
-    console.log(data.split(" ")[1][0] == "t", 1)
     return data.split(" ")[1]
   })
 }
@@ -101,5 +100,5 @@ app.post("^/$|/index(.html)?", function(req, res) {
 })
 
 app.listen(8080, function() {
-  console.log("Let's go")
+  console.log("App Ready")
 })
