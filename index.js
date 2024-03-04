@@ -30,11 +30,11 @@ async function beep () {
 }
 
 function open() {
-  global.motor.write(0.1)
+  global.motor.write(0.0075)
 }
 
 function close() {
-  global.motor.write(0.075)
+  global.motor.write(0.07)
 }
 
 function sleep(ms) {
@@ -87,11 +87,11 @@ app.post("^/$|/index(.html)?", function(req, res) {
   let data = req.body
   switch (data.req) {
     case "lock":
-      global.motor.write(0.05)
+      close()
       logEvent(data.date, data.time, data.event)
       break
     case "unlock":
-      global.motor.write(0.1)
+      open()
       logEvent(data.date, data.time, data.event)
       beep()
       break
