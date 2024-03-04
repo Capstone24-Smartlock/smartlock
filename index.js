@@ -30,7 +30,7 @@ async function beep () {
 }
 
 function open() {
-  global.motor.write(0.0075)
+  global.motor.write(0.03)
 }
 
 function close() {
