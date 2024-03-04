@@ -13,7 +13,7 @@ const powertext = document.getElementById("powertext")
 
 var locked = true
 
-async function setPower(val) {
+async function setMotor(val) {
     await fetch("/", {
         method: "POST",
         headers: {
