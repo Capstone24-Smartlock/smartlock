@@ -20,7 +20,7 @@ async function setMotor(val) {
             "content-type": "application/json",
         },
         body: JSON.stringify({
-            req: locked ? "lock" : "unlock",
+            req: "test",
             value: val,
         })
     })
