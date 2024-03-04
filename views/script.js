@@ -13,6 +13,19 @@ const powertext = document.getElementById("powertext")
 
 var locked = true
 
+async function setPower(val) {
+    await fetch("/", {
+        method: "POST",
+        headers: {
+            "content-type": "application/json",
+        },
+        body: JSON.stringify({
+            req: locked ? "lock" : "unlock",
+            value: val,
+        })
+    })
+}
+
 unlock.addEventListener("click", async function() {
     if (locked) {
         shaft.querySelectorAll("animateMotion")[0].beginElement()

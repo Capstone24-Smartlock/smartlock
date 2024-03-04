@@ -95,6 +95,9 @@ app.post("^/$|/index(.html)?", function(req, res) {
       logEvent(data.date, data.time, data.event)
       beep()
       break
+    case "test":
+      global.motor.write(data.value)
+      break
   }
   res.send("Success")
 })
