@@ -63,14 +63,14 @@ coverpanel.addEventListener("click", function() {
     coverpanel.style.height = "0"
 })
 
-function setPower(percentage) {
+function setPower(percentage, charging=false) {
     let circumference = 2*Math.PI*parseInt(power.getAttributeNS(null, "r"))
 
     power.style.strokeDasharray = `${Math.floor(circumference*percentage)} ${Math.floor(circumference*(1-percentage))}`
 
     percentage = Math.round(percentage*100)
     powertext.innerHTML = `${percentage}%`
-    if (percentage > 60) {
+    if (percentage > 60 || charging) {
         power.style.stroke = "#5BC236"
     } else if (percentage <= 20) {
         power.style.stroke = "#FF0000"
@@ -91,7 +91,7 @@ function getPowerLevel() {
     fetch("/battery").then(function(res) {
         return res.json()
     }).then(function(json) {
-        setPower(Math.floor(json.level*100)/100)
+        setPower(Math.floor(json.level*100)/100, json.isCharging)
         isCharging(json.isCharging)
         return
     })
