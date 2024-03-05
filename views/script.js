@@ -10,6 +10,7 @@ const coverpanel = document.getElementById("coverpanel")
 
 const power = document.getElementById("power")
 const powertext = document.getElementById("powertext")
+const chargingIcon = document.getElementById("chargingIcon")
 
 var locked = true
 
@@ -78,11 +79,20 @@ function setPower(percentage) {
     }
 }
 
+function isCharging(bool) {
+    if (bool) {
+        chargingIcon.setAttributeNS(null, "y", "-250")
+    } else {
+        chargingIcon.setAttributeNS(null, "y", "-2000")
+    }
+}
+
 function getPowerLevel() {
     fetch("/battery").then(function(res) {
         return res.json()
     }).then(function(json) {
         setPower(Math.floor(json.level*100)/100)
+        isCharging(json.isCharging)
         return
     })
 }
