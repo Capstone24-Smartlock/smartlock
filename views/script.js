@@ -53,10 +53,10 @@ unlock.addEventListener("click", async function() {
                 "content-type": "application/json",
             },
             body: JSON.stringify({
-                req: locked ? "lock" : "unlock",
+                req: Lock.locked ? "lock" : "unlock",
                 date: getDate(date),
                 time: getTime(date),
-                event: locked ? 0 : 1
+                event: Lock.locked ? 0 : 1
             })
         })
         Lock.locked = false
@@ -79,7 +79,7 @@ lockSocket.addEventListener("message", async function() {
             req: Lock.locked ? "lock" : "unlock",
             date: getDate(date),
             time: getTime(date),
-            event: locked ? 0 : 1
+            event: Lock.locked ? 0 : 1
         })
     })
     console.log("kill urself")
