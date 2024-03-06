@@ -42,8 +42,6 @@ class Lock {
     }
 }
 
-var locked = true
-
 async function setMotor(val) {
     await fetch("/", {
         method: "POST",
@@ -60,20 +58,6 @@ async function setMotor(val) {
 unlock.addEventListener("click", async function() {
     if (Lock.locked) {
         Lock.locked = false
-
-        // let date = new Date()
-        // await fetch("/", {
-        //     method: "POST",
-        //     headers: {
-        //         "content-type": "application/json",
-        //     },
-        //     body: JSON.stringify({
-        //         req: Lock.locked ? "lock" : "unlock",
-        //         date: getDate(date),
-        //         time: getTime(date),
-        //         event: Lock.locked ? 0 : 1
-        //     })
-        // })
     }
 })
 
@@ -81,22 +65,6 @@ const lockSocket = new WebSocket(`${location.origin.replace("http://", "ws://").
 
 lockSocket.addEventListener("message", async function() {
     Lock.locked = true
-
-    // let date = new Date()
-
-    // await fetch("/", {
-    //     method: "POST",
-    //     headers: {
-    //         "content-type": "application/json",
-    //     },
-    //     body: JSON.stringify({
-    //         req: Lock.locked ? "lock" : "unlock",
-    //         date: getDate(date),
-    //         time: getTime(date),
-    //         event: Lock.locked ? 0 : 1
-    //     })
-    // })
-    console.log("kill urself")
 })
 
 burger.addEventListener("click", function() {
