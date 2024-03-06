@@ -17,7 +17,7 @@ global.button = new gpio.DigitalInput({
 
 button.on("change", function(val) {
   if (val == 0) {
-    open()
+    close()
   }
 })
 
