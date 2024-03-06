@@ -94,7 +94,7 @@ app.ws('/lock', function(ws, req) {
   button.on("change", function(val) {
     if (val == 0) {
       close()
-      ws.send(true)
+      ws.send("closed")
     }
   });
 });
