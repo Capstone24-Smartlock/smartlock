@@ -46,8 +46,6 @@ async function setMotor(val) {
 
 unlock.addEventListener("click", async function() {
     if (Lock.locked) {
-        Lock.locked = false
-
         let date = new Date()
         await fetch("/", {
             method: "POST",
@@ -61,6 +59,7 @@ unlock.addEventListener("click", async function() {
                 event: locked ? 0 : 1
             })
         })
+        Lock.locked = false
     }
 })
 
