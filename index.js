@@ -10,6 +10,16 @@ const app = express()
 
 global.motor = new pwm.SoftPWM(5)
 global.beeper = new gpio.DigitalOutput(1)
+global.button = new gpio.DigitalInput({
+  pin: 26,
+  pullResistor: gpio.PULL_DOWN,
+})
+
+button.on("change", function(val) {
+  if (val == gpio.HIGH) {
+    open()
+  }
+})
 
 async function logEvent(date, time, event) {
   let log = fs.readFileSync("./log.json").toString()
