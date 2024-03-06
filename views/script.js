@@ -62,21 +62,6 @@ unlock.addEventListener("click", async function() {
             })
         })
     }
-
-    let date = new Date()
-
-    await fetch("/", {
-        method: "POST",
-        headers: {
-            "content-type": "application/json",
-        },
-        body: JSON.stringify({
-            req: Lock.locked ? "lock" : "unlock",
-            date: getDate(date),
-            time: getTime(date),
-            event: locked ? 0 : 1
-        })
-    })
 })
 
 const lockSocket = new WebSocket(`${location.origin.replace("http://", "ws://").replace("https://", "wss://")}/lock`)
