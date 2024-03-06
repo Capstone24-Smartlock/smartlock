@@ -16,8 +16,7 @@ global.button = new gpio.DigitalInput({
 })
 
 button.on("change", function(val) {
-  console.log(val)
-  if (val == gpio.HIGH) {
+  if (val == 0) {
     open()
   }
 })
