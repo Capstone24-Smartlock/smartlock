@@ -12,11 +12,11 @@ global.motor = new pwm.SoftPWM(5)
 global.beeper = new gpio.DigitalOutput(1)
 global.button = new gpio.DigitalInput({
   pin: 26,
-  pullResistor: gpio.PULL_DOWN,
+  pullResistor: gpio.PULL_UP,
 })
 
 button.on("change", function(val) {
-  console.log("High")
+  console.log(val)
   if (val == gpio.HIGH) {
     open()
   }
