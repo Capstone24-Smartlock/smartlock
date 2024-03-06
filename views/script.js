@@ -12,6 +12,23 @@ const power = document.getElementById("power")
 const powertext = document.getElementById("powertext")
 const chargingIcon = document.getElementById("chargingIcon")
 
+class Lock {
+    static lockedVar = true
+
+    static get locked() {
+        return lockedVar
+    }
+
+    static set locked(val) {
+        Lock.lockedVar = val
+        if (val) {
+            shaft.querySelectorAll("animateMotion")[0].beginElement()
+        } else {
+            shaft.querySelectorAll("animateMotion")[1].beginElement()
+        }
+    }
+}
+
 var locked = true
 
 async function setMotor(val) {
@@ -28,12 +45,23 @@ async function setMotor(val) {
 }
 
 unlock.addEventListener("click", async function() {
-    if (locked) {
-        shaft.querySelectorAll("animateMotion")[0].beginElement()
-    } else {
-        shaft.querySelectorAll("animateMotion")[1].beginElement()
+    if (Lock.locked) {
+        Lock.locked = false
+
+        let date = new Date()
+        await fetch("/", {
+            method: "POST",
+            headers: {
+                "content-type": "application/json",
+            },
+            body: JSON.stringify({
+                req: locked ? "lock" : "unlock",
+                date: getDate(date),
+                time: getTime(date),
+                event: locked ? 0 : 1
+            })
+        })
     }
-    locked = !locked
 
     let date = new Date()
 
@@ -43,7 +71,7 @@ unlock.addEventListener("click", async function() {
             "content-type": "application/json",
         },
         body: JSON.stringify({
-            req: locked ? "lock" : "unlock",
+            req: Lock.locked ? "lock" : "unlock",
             date: getDate(date),
             time: getTime(date),
             event: locked ? 0 : 1
@@ -53,10 +81,25 @@ unlock.addEventListener("click", async function() {
 
 const lockSocket = new WebSocket(`${location.origin.replace("http://", "ws://").replace("https://", "wss://")}/lock`)
 
-lockSocket.addEventListener("message", function() {
-    locked = true;
+lockSocket.addEventListener("message", async function() {
+    Lock.locked = true
+
+    let date = new Date()
+
+    await fetch("/", {
+        method: "POST",
+        headers: {
+            "content-type": "application/json",
+        },
+        body: JSON.stringify({
+            req: Lock.locked ? "lock" : "unlock",
+            date: getDate(date),
+            time: getTime(date),
+            event: locked ? 0 : 1
+        })
+    })
     console.log("kill urself")
-});
+})
 
 burger.addEventListener("click", function() {
     sidepanel.style.width = "250px"
