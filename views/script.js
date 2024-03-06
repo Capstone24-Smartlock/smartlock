@@ -20,7 +20,7 @@ class Lock {
     }
 
     static set locked(val) {
-        if (val) {
+        if (!val) {
             shaft.querySelectorAll("animateMotion")[0].beginElement()
         } else {
             shaft.querySelectorAll("animateMotion")[1].beginElement()
