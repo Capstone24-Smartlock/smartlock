@@ -20,12 +20,12 @@ class Lock {
     }
 
     static set locked(val) {
-        Lock.lockedVar = val
         if (val) {
             shaft.querySelectorAll("animateMotion")[0].beginElement()
         } else {
             shaft.querySelectorAll("animateMotion")[1].beginElement()
         }
+        Lock.lockedVar = val
     }
 }
 
