@@ -16,7 +16,7 @@ class Lock {
     static lockedVar = true
 
     static get locked() {
-        return lockedVar
+        return Lock.lockedVar
     }
 
     static set locked(val) {
