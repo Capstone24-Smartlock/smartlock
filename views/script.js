@@ -20,11 +20,24 @@ class Lock {
     }
 
     static set locked(val) {
-        if (!val) {
-            shaft.querySelectorAll("animateMotion")[0].beginElement()
-        } else {
+        if (val) {
             shaft.querySelectorAll("animateMotion")[1].beginElement()
+        } else {
+            shaft.querySelectorAll("animateMotion")[0].beginElement()
         }
+        let date = new Date()
+        fetch("/", {
+            method: "POST",
+            headers: {
+                "content-type": "application/json",
+            },
+            body: JSON.stringify({
+                req: val ? "lock" : "unlock",
+                date: getDate(date),
+                time: getTime(date),
+                event: val ? 0 : 1
+            })
+        })
         Lock.lockedVar = val
     }
 }
@@ -48,19 +61,19 @@ unlock.addEventListener("click", async function() {
     if (Lock.locked) {
         Lock.locked = false
 
-        let date = new Date()
-        await fetch("/", {
-            method: "POST",
-            headers: {
-                "content-type": "application/json",
-            },
-            body: JSON.stringify({
-                req: Lock.locked ? "lock" : "unlock",
-                date: getDate(date),
-                time: getTime(date),
-                event: Lock.locked ? 0 : 1
-            })
-        })
+        // let date = new Date()
+        // await fetch("/", {
+        //     method: "POST",
+        //     headers: {
+        //         "content-type": "application/json",
+        //     },
+        //     body: JSON.stringify({
+        //         req: Lock.locked ? "lock" : "unlock",
+        //         date: getDate(date),
+        //         time: getTime(date),
+        //         event: Lock.locked ? 0 : 1
+        //     })
+        // })
     }
 })
 
@@ -69,20 +82,20 @@ const lockSocket = new WebSocket(`${location.origin.replace("http://", "ws://").
 lockSocket.addEventListener("message", async function() {
     Lock.locked = true
 
-    let date = new Date()
+    // let date = new Date()
 
-    await fetch("/", {
-        method: "POST",
-        headers: {
-            "content-type": "application/json",
-        },
-        body: JSON.stringify({
-            req: Lock.locked ? "lock" : "unlock",
-            date: getDate(date),
-            time: getTime(date),
-            event: Lock.locked ? 0 : 1
-        })
-    })
+    // await fetch("/", {
+    //     method: "POST",
+    //     headers: {
+    //         "content-type": "application/json",
+    //     },
+    //     body: JSON.stringify({
+    //         req: Lock.locked ? "lock" : "unlock",
+    //         date: getDate(date),
+    //         time: getTime(date),
+    //         event: Lock.locked ? 0 : 1
+    //     })
+    // })
     console.log("kill urself")
 })
 
