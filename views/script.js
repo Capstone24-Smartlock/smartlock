@@ -51,6 +51,13 @@ unlock.addEventListener("click", async function() {
     })
 })
 
+const lockSocket = new WebSocket(`${location.origin.replace("http://", "ws://").replace("https://", "wss://")}/lock`)
+
+lockSocket.addEventListener("message", function() {
+    locked = true;
+    console.log("kill urself")
+});
+
 burger.addEventListener("click", function() {
     sidepanel.style.width = "250px"
     coverpanel.style.width = "100%"

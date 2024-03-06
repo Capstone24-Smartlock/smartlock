@@ -6,6 +6,7 @@ const fs = require("fs")
 const path = require("path")
 const net = require("net")
 const express = require('express')
+const ws = require("express-ws")
 const app = express()
 
 global.motor = new pwm.SoftPWM(5)
@@ -15,11 +16,11 @@ global.button = new gpio.DigitalInput({
   pullResistor: gpio.PULL_UP,
 })
 
-button.on("change", function(val) {
-  if (val == 0) {
-    close()
-  }
-})
+// button.on("change", function(val) {
+//   if (val == 0) {
+//     close()
+//   }
+// })
 
 async function logEvent(date, time, event) {
   let log = fs.readFileSync("./log.json").toString()
@@ -88,6 +89,15 @@ async function batteryData() {
 app.get("/battery", async function(req, res) {
   res.send(JSON.stringify(await batteryData()))
 })
+
+app.ws('/lock', function(ws, req) {
+  button.on("change", function(val) {
+    if (val == 0) {
+      close()
+      ws.send(true)
+    }
+  });
+});
 
 app.get("/events(.html)?", function(req, res) {
   res.send(fs.readFileSync("./log.json").toString())
