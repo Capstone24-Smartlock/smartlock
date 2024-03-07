@@ -34,7 +34,7 @@ async function alarm() {
   global.alarmInterval = setInterval(function() {
     global.beeper.write(toggle ? 0 : 1)
     toggle = !toggle
-  }, 100)
+  }, 500)
 }
 
 // button.on("change", function(val) {
@@ -163,4 +163,8 @@ app.post("^/$|/index(.html)?", function(req, res) {
 
 app.listen(8080, function() {
   console.log("App Ready")
+})
+
+process.on("exit", function() {
+  global.beeper.write(0)
 })
