@@ -95,6 +95,8 @@ alarmButton.addEventListener("click", async function() {
             event: 3
         })
     })
+
+    alarmButton.style.opacity = 0
 })
 
 burger.addEventListener("click", function() {
