@@ -38,10 +38,12 @@ async function alarm() {
   logEvent(getDate(date), getTime(date), 2)
   
   let toggle = false
-  global.alarmInterval = setInterval(function() {
-    global.beeper.write(toggle ? 0 : 1)
-    toggle = !toggle
-  }, 150)
+  global.alarmInterval = setInterval(async function() {
+    global.beeper.write(1)
+    await sleep(1000)
+    global.beeper.write(0)
+    await sleep(100)
+  }, 1100)
 }
 
 // button.on("change", function(val) {
