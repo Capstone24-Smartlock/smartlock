@@ -11,6 +11,7 @@ const ws = require("express-ws")(app)
 
 global.motor = new pwm.SoftPWM(5)
 global.beeper = new gpio.DigitalOutput(1)
+global.beeper.write(0)
 global.button = new gpio.DigitalInput({
   pin: 26,
   pullResistor: gpio.PULL_UP,
