@@ -16,6 +16,24 @@ global.button = new gpio.DigitalInput({
   pullResistor: gpio.PULL_UP,
 })
 
+global.locked = true
+
+global.timer = 0
+global.timerList = [0]
+
+setInterval(function() {
+  global.timer += 10
+  if (global.timerList.length > 5) {
+    global.timerList = global.timerList.slice(-5)
+  }
+}, 10)
+
+async function alarm() {
+  global.alarmInterval = setInterval(function() {
+    global.beeper.write(global.beeper.read() == 0 ? 1 : 0)
+  }, 100)
+}
+
 // button.on("change", function(val) {
 //   if (val == 0) {
 //     close()
@@ -31,7 +49,7 @@ async function logEvent(date, time, event) {
   fs.writeFileSync("./log.json", JSON.stringify(log))
 }
 
-async function beep () {
+async function beep() {
   for (let i = 0; i < 2; i++) {
     global.beeper.write(1)
     await sleep(100)
@@ -41,10 +59,12 @@ async function beep () {
 }
 
 function open() {
+  global.locked = false
   global.motor.write(0.03)
 }
 
 function close() {
+  global.locked = true
   global.motor.write(0.07)
 }
 
@@ -90,11 +110,24 @@ app.get("/battery", async function(req, res) {
   res.send(JSON.stringify(await batteryData()))
 })
 
+button.on("change", function(val) {
+  if (global.locked) {
+    global.timerList.push(global.timer + global.timerList[global.timerList - 1])
+    if (global.timerList.every(function(e) {
+      return e <= 1000
+    })) {
+
+    }
+  }
+})
+
 app.ws('/lock', function(ws, req) {
   button.on("change", function(val) {
-    if (val == 0) {
-      close()
-      ws.send("closed")
+    if (!global.locked) {
+      if (val == 0) {
+        close()
+        ws.send("closed")
+      }
     }
   });
 });
