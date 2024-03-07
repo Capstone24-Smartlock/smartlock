@@ -149,6 +149,7 @@ app.ws('/lock', function(ws, req) {
       global.timer = 0
       if (global.timerList.length >= 10 && !global.alarmOn) {
         if (global.timerList.slice(-10).every(function(e) {
+          console.log(e<=1000)
           return e <= 1000
         })) {
           console.log("Success")
