@@ -190,6 +190,7 @@ app.post("^/$|/index(.html)?", function(req, res) {
       global.motor.write(data.value)
       break
     case "alarm stopped":
+      logEvent(data.date, data.time, data.event)
       clearInterval(global.alarmInterval)
       global.beeper.write(0)
   }
