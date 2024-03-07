@@ -24,8 +24,8 @@ global.timerList = [0]
 
 setInterval(function() {
   global.timer += 10
-  if (global.timerList.length > 5) {
-    global.timerList = global.timerList.slice(-5)
+  if (global.timerList.length > 25) {
+    global.timerList = global.timerList.slice(-25)
   }
 }, 10)
 
@@ -117,10 +117,12 @@ button.on("change", function(val) {
   if (global.locked) {
     global.timerList.push(global.timerList[global.timerList.length - 1] - global.timer)
     console.log(global.timer, global.timerList)
-    if (global.timerList.every(function(e) {
-      return e <= 1000
-    })) {
-      alarm()
+    if (global.timerList.length >= 20) {
+      if (global.timerList.every(function(e) {
+        return e <= 1000
+      })) {
+        alarm()
+      }
     }
   }
 })
