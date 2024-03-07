@@ -41,7 +41,7 @@ async function alarm() {
   global.alarmInterval = setInterval(function() {
     global.beeper.write(toggle ? 0 : 1)
     toggle = !toggle
-  }, 50)
+  }, 150)
 }
 
 // button.on("change", function(val) {
