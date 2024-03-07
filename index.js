@@ -144,15 +144,12 @@ app.ws('/lock', function(ws, req) {
         ws.send("closed")
       }
     } else {
-      console.log(global.timerList)
       global.timerList.push(global.timer)
       global.timer = 0
       if (global.timerList.length >= 10 && !global.alarmOn) {
         if (global.timerList.slice(-10).every(function(e) {
-          console.log(e<=1000)
           return e <= 1000
         })) {
-          console.log("Success")
           alarm()
           ws.send("alarm")
         }
@@ -182,6 +179,7 @@ app.post("^/$|/index(.html)?", function(req, res) {
       break
     case "alarm stopped":
       logEvent(data.date, data.time, data.event)
+      global.alarmOn = false
       clearInterval(global.alarmInterval)
       global.beeper.write(0)
   }
