@@ -112,7 +112,7 @@ app.get("/battery", async function(req, res) {
 
 button.on("change", function(val) {
   if (global.locked) {
-    global.timerList.push(global.timer + global.timerList[global.timerList - 1])
+    global.timerList.push(global.timer + global.timerList[global.timerList.length - 1])
     console.log(global.timer, global.timerList)
     if (global.timerList.every(function(e) {
       return e <= 1000
