@@ -64,7 +64,9 @@ unlock.addEventListener("click", async function() {
 const lockSocket = new WebSocket(`${location.origin.replace("http://", "ws://").replace("https://", "wss://")}/lock`)
 
 lockSocket.addEventListener("message", async function() {
-    Lock.locked = true
+    if (!Lock.locked) {
+        Lock.locked = true
+    }
 })
 
 burger.addEventListener("click", function() {
