@@ -116,7 +116,7 @@ button.on("change", function(val) {
     if (global.timerList.every(function(e) {
       return e <= 1000
     })) {
-
+      alarm()
     }
   }
 })
