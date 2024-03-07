@@ -73,7 +73,9 @@ lockSocket.addEventListener("message", async function(event) {
             }
             break
         case "alarm":
-            alarmButton.style.opacity = "1"
+            console.log("Cooking")
+            alarmButton.style.opacity = 1
+            break
     }
 })
 
