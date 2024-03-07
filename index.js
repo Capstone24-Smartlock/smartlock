@@ -151,6 +151,7 @@ app.ws('/lock', function(ws, req) {
         if (global.timerList.slice(-10).every(function(e) {
           return e <= 1000
         })) {
+          console.log("Success")
           alarm()
           ws.send("alarm")
         }
