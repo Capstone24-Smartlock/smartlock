@@ -157,6 +157,7 @@ app.ws('/lock', function(ws, req) {
         ws.send("closed")
       }
     } else {
+      console.log(global.timerList)
       global.timerList.push(global.timerList[global.timerList.length - 1] - global.timer)
       if (global.timerList.length >= 10 && !global.alarmOn) {
         if (global.timerList.slice(-10).every(function(e) {
