@@ -12,7 +12,7 @@ const power = document.getElementById("power")
 const powertext = document.getElementById("powertext")
 const chargingIcon = document.getElementById("chargingIcon")
 
-const alarmButton = document.getElementById("alarmButton")
+const alarmButton = document.getElementById("alarm")
 
 class Lock {
     static lockedVar = true
