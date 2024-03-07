@@ -33,6 +33,10 @@ global.alarmOn = false
 
 async function alarm() {
   global.alarmOn = true
+
+  let date = new Date()
+  logEvent(getDate(date), getTime(date), 2)
+  
   let toggle = true
   global.alarmInterval = setInterval(function() {
     global.beeper.write(toggle ? 0 : 1)
@@ -45,6 +49,22 @@ async function alarm() {
 //     close()
 //   }
 // })
+
+function getDate(d) {
+  return d.getMonth() + 1 + "/" + d.getDate() + "/" + d.getFullYear()
+}
+
+function getTime(d) {
+  let hour = d.getHours()
+  let morning = hour < 11
+  if (hour == 0) {
+      hour = 12
+  } else if (hour >= 13) {
+      hour -= 12
+  }
+
+  return hour + ":" + d.getMinutes().toString().padStart(2, "0") + ":" + d.getSeconds().toString().padStart(2, "0") + " " + (morning ? "AM" : "PM")
+}
 
 async function logEvent(date, time, event) {
   let log = fs.readFileSync("./log.json").toString()
@@ -119,7 +139,6 @@ app.get("/battery", async function(req, res) {
 button.on("change", function(val) {
   if (global.locked) {
     global.timerList.push(global.timerList[global.timerList.length - 1] - global.timer)
-    console.log(global.timer, global.timerList)
     if (global.timerList.length >= 20 && !global.alarmOn) {
       if (global.timerList.every(function(e) {
         return e <= 1000

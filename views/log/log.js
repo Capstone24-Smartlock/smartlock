@@ -13,6 +13,8 @@ class LogEvent {
                 return "Lock was locked"
             case 1:
                 return "Lock was unlocked"
+            case 2:
+                return "Break in attempt detected"
         }
     }
 
@@ -20,7 +22,7 @@ class LogEvent {
         let colors = {
             black: [1],
             green: [0],
-            red: [],
+            red: [2],
         }
         let colorList = Object.keys(colors)
         for (let i = 0; i < colorList.length; i++) {
