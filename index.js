@@ -140,7 +140,7 @@ button.on("change", function(val) {
   if (global.locked) {
     global.timerList.push(global.timerList[global.timerList.length - 1] - global.timer)
     if (global.timerList.length >= 20 && !global.alarmOn) {
-      if (global.timerList.every(function(e) {
+      if (global.timerList.slice(-10).every(function(e) {
         return e <= 1000
       })) {
         alarm()
