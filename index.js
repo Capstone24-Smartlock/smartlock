@@ -29,8 +29,10 @@ setInterval(function() {
 }, 10)
 
 async function alarm() {
+  let toggle = true
   global.alarmInterval = setInterval(function() {
-    global.beeper.write(global.beeper.read() == 0 ? 1 : 0)
+    global.beeper.write(toggle ? 0 : 1)
+    toggle = !toggle
   }, 100)
 }
 
