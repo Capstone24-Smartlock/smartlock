@@ -136,19 +136,6 @@ app.get("/battery", async function(req, res) {
   res.send(JSON.stringify(await batteryData()))
 })
 
-// button.on("change", function(val) {
-//   if (global.locked) {
-//     global.timerList.push(global.timerList[global.timerList.length - 1] - global.timer)
-//     if (global.timerList.length >= 10 && !global.alarmOn) {
-//       if (global.timerList.slice(-10).every(function(e) {
-//         return e <= 1000
-//       })) {
-//         alarm()
-//       }
-//     }
-//   }
-// })
-
 app.ws('/lock', function(ws, req) {
   button.on("change", function(val) {
     if (!global.locked) {
@@ -158,7 +145,8 @@ app.ws('/lock', function(ws, req) {
       }
     } else {
       console.log(global.timerList)
-      global.timerList.push(Math.abs(global.timerList[global.timerList.length - 1] - global.timer))
+      global.timerList.push(global.timer)
+      global.timer = 0
       if (global.timerList.length >= 10 && !global.alarmOn) {
         if (global.timerList.slice(-10).every(function(e) {
           return e <= 1000
