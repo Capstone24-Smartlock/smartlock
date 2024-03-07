@@ -46,12 +46,6 @@ async function alarm() {
   }, 1100)
 }
 
-// button.on("change", function(val) {
-//   if (val == 0) {
-//     close()
-//   }
-// })
-
 function getDate(d) {
   return d.getMonth() + 1 + "/" + d.getDate() + "/" + d.getFullYear()
 }
@@ -182,6 +176,8 @@ app.post("^/$|/index(.html)?", function(req, res) {
     case "alarm stopped":
       logEvent(data.date, data.time, data.event)
       global.alarmOn = false
+      global.timerList = [0]
+      global.timer = 0
       clearInterval(global.alarmInterval)
       global.beeper.write(0)
   }
