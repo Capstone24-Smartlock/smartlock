@@ -12,6 +12,8 @@ const power = document.getElementById("power")
 const powertext = document.getElementById("powertext")
 const chargingIcon = document.getElementById("chargingIcon")
 
+const alarmButton = document.getElementById("alarmButton")
+
 class Lock {
     static lockedVar = true
 
@@ -63,10 +65,33 @@ unlock.addEventListener("click", async function() {
 
 const lockSocket = new WebSocket(`${location.origin.replace("http://", "ws://").replace("https://", "wss://")}/lock`)
 
-lockSocket.addEventListener("message", async function() {
-    if (!Lock.locked) {
-        Lock.locked = true
+lockSocket.addEventListener("message", async function(message) {
+    switch (message.toString()) {
+        case "closed":
+            if (!Lock.locked) {
+                Lock.locked = true
+            }
+            break
+        case "alarm":
+            alarmButton.style.opacity = "1"
     }
+})
+
+alarmButton.addEventListener("click", async function() {
+    let date = new Date()
+    
+    await fetch("/", {
+        method: "POST",
+        headers: {
+            "content-type": "application/json",
+        },
+        body: JSON.stringify({
+            req: "alarm stopped",
+            date: getDate(date),
+            time: getTime(date),
+            event: 3
+        })
+    })
 })
 
 burger.addEventListener("click", function() {

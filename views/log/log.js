@@ -15,12 +15,14 @@ class LogEvent {
                 return "Lock was unlocked"
             case 2:
                 return "Break in attempt detected"
+            case 3:
+                return "Alarm stopped"
         }
     }
 
     get color() {
         let colors = {
-            black: [1],
+            black: [1, 3],
             green: [0],
             red: [2],
         }
