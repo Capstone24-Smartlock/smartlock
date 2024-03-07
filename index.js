@@ -37,7 +37,7 @@ async function alarm() {
   let date = new Date()
   logEvent(getDate(date), getTime(date), 2)
   
-  let toggle = true
+  let toggle = false
   global.alarmInterval = setInterval(function() {
     global.beeper.write(toggle ? 0 : 1)
     toggle = !toggle
