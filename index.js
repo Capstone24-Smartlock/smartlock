@@ -29,7 +29,10 @@ setInterval(function() {
   }
 }, 10)
 
+global.alarmOn = false
+
 async function alarm() {
+  global.alarmOn = true
   let toggle = true
   global.alarmInterval = setInterval(function() {
     global.beeper.write(toggle ? 0 : 1)
@@ -117,7 +120,7 @@ button.on("change", function(val) {
   if (global.locked) {
     global.timerList.push(global.timerList[global.timerList.length - 1] - global.timer)
     console.log(global.timer, global.timerList)
-    if (global.timerList.length >= 20) {
+    if (global.timerList.length >= 20 && !global.alarmOn) {
       if (global.timerList.every(function(e) {
         return e <= 1000
       })) {
