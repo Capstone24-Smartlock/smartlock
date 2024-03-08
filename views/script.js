@@ -66,15 +66,13 @@ unlock.addEventListener("click", async function() {
 const lockSocket = new WebSocket(`${location.origin.replace("http://", "ws://").replace("https://", "wss://")}/lock`)
 
 lockSocket.addEventListener("message", async function(event) {
-    console.log(event.data, event.data.toString())
-    switch (event.data.toString()) {
+    switch (event.data) {
         case "closed":
             if (!Lock.locked) {
                 Lock.locked = true
             }
             break
         case "alarm":
-            console.log("Cooking")
             alarmButton.style.opacity = 1
             break
     }
