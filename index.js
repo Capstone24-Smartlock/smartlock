@@ -80,7 +80,7 @@ class Alarm {
   }
 
   static check() {
-    if (Alarm.timerList.length >= Alarm.length) {
+    if (Alarm.timerList.length >= Alarm.length && !Alarm.#on) {
       if (Alarm.timerList.slice(-1*Alarm.length).every(function(e) {
         return e <= Alarm.distance
       })) {
@@ -197,7 +197,7 @@ app.ws("/lock", function(ws, req) {
 app.ws("/alarm", function(ws, req) {
   Electronics.button.on("change", function(val) {
     if (Lock.locked) {
-      if (val == 1 && !Alarm.on) {
+      if (val == 1) {
         Alarm.tick()
         if (Alarm.check()) {
           Alarm.on = true
