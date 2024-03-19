@@ -101,6 +101,7 @@ setInterval(function() {
   if (Alarm.timerList.length > Alarm.length + 5) {
     Alarm.timerList = Alarm.timerList.slice(-1*(Alarm.length + 5))
   }
+  console.log(Alarm.timer)
 }, 10)
 
 function getDate(d) {
@@ -204,6 +205,7 @@ app.ws("/alarm", function(ws, req) {
     if (Lock.locked) {
       if (val == 1) {
         Alarm.tick()
+        console.log(Alarm.timerList)
         if (Alarm.check()) {
           Alarm.on = true
           ws.send("alarm")
