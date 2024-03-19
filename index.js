@@ -36,6 +36,7 @@ class Lock {
       Electronics.motor.write(Lock.#opened)
       beep()
     }
+    Lock.#locked = val
   }
 }
 
@@ -189,11 +190,8 @@ app.get("/battery", async function(req, res) {
 
 app.ws("/lock", function(ws, req) {
   Electronics.button.on("change", function(val) {
-    console.log(1)
     if (!Lock.locked) {
-      console.log(2)
       if (val == 0) {
-        console.log(3)
         Lock.locked = true
         ws.send("locked")
       }
