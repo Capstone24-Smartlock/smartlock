@@ -59,9 +59,9 @@ class Alarm {
       logEvent(getDate(date), getTime(date), 2)
 
       Alarm.#interval = setInterval(async function() {
-        Electronics.motor.write(1)
+        Electronics.beeper.write(1)
         await sleep(1000)
-        Electronics.motor.write(0)
+        Electronics.beeper.write(0)
         await sleep(100)
       }, 1100)
     } else if (!val && Alarm.#on) {
@@ -80,7 +80,6 @@ class Alarm {
   }
 
   static check() {
-    console.log(Alarm.timerList, Alarm.length, Alarm.#on)
     if (Alarm.timerList.length >= Alarm.length && !Alarm.#on) {
       if (Alarm.timerList.slice(-1*Alarm.length).every(function(e) {
         return e <= Alarm.distance
@@ -198,7 +197,7 @@ app.ws("/lock", function(ws, req) {
 app.ws("/alarm", function(ws, req) {
   Electronics.button.on("change", function(val) {
     if (Lock.locked) {
-      if (val == 1) {
+      if (val == 1 && !Alarm.on) {
         Alarm.tick()
         if (Alarm.check()) {
           Alarm.on = true
