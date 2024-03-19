@@ -117,7 +117,7 @@ async function batteryProperties(req) {
       text = data.toString()
       console.log(text)
       console.log(text.split(""))
-      if (text.valueOf() === "Invalid Request.".valueOf()) {
+      if (texts.split().slice(0,-1).join("").valueOf() === "Invalid Request.".valueOf()) {
         reject()
       }
       resolve(text)
