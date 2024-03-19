@@ -120,31 +120,6 @@ class Event {
   }
 }
 
-function getDate(d) {
-  return d.getMonth() + 1 + "/" + d.getDate() + "/" + d.getFullYear()
-}
-
-function getTime(d) {
-  let hour = d.getHours()
-  let morning = hour < 11
-  if (hour == 0) {
-      hour = 12
-  } else if (hour >= 13) {
-      hour -= 12
-  }
-
-  return hour + ":" + d.getMinutes().toString().padStart(2, "0") + ":" + d.getSeconds().toString().padStart(2, "0") + " " + (morning ? "AM" : "PM")
-}
-
-async function logEvent(date, time, event) {
-  let log = fs.readFileSync("./log.json").toString()
-  log = await JSON.parse(log)
-  log.date.push(date)
-  log.time.push(time)
-  log.event.push(event)
-  fs.writeFileSync("./log.json", JSON.stringify(log))
-}
-
 function sleep(ms) {
   return new Promise((resolve) => {
     setTimeout(resolve, ms)
