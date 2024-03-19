@@ -133,7 +133,7 @@ async function batteryProperties(req) {
 async function batteryData() {
   let val = {
     level: parseFloat(await batteryProperties("get battery"))/100,
-    isCharging: (await batteryProperties("get battery_power_plugged"))[0] == "t",
+    isCharging: (await batteryProperties("get battery_power_plugged")) == "true",
   }
 
   console.log(val)
