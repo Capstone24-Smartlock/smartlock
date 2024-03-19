@@ -115,7 +115,7 @@ async function batteryProperties(req) {
   return await new Promise(function(resolve, reject) {
     battery.on("data", function(data) {
       text = data.toString()
-      if (text.valueOf() == "Invalid Request.".valueOf()) {
+      if (text.valueOf() === "Invalid Request.".valueOf()) {
         reject()
       }
       resolve(text)
