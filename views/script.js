@@ -136,6 +136,12 @@ function getPowerLevel() {
     fetch("/battery").then(function(res) {
         return res.json()
     }).then(function(json) {
+        if (json === null) {
+            json = {
+                level: 0,
+                isCharging: false,
+            }
+        }
         setPower(Math.floor(json.level*100)/100, json.isCharging)
         isCharging(json.isCharging)
         return
