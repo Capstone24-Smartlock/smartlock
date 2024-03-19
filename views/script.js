@@ -36,8 +36,7 @@ class Lock {
                 },
                 body: JSON.stringify({
                     req: val ? "lock" : "unlock",
-                    date: getDate(date),
-                    time: getTime(date),
+                    date: date.toLocaleString(),
                     event: val ? 0 : 1
                 })
             })
@@ -87,8 +86,7 @@ alarmButton.addEventListener("click", async function() {
         },
         body: JSON.stringify({
             req: "alarm stopped",
-            date: getDate(date),
-            time: getTime(date),
+            date: date.toLocaleString(),
             event: 3
         })
     })
@@ -138,7 +136,7 @@ function getPowerLevel() {
     }).then(function(json) {
         if (json === null) {
             json = {
-                level: 0,
+                level: 1,
                 isCharging: false,
             }
         }

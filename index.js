@@ -16,6 +16,15 @@ class Electronics {
     pin: 26,
     pullResistor: gpio.PULL_UP,
   })
+
+  static async beep() {
+    for (let i = 0; i < 2; i++) {
+      Electronics.beeper.write(1)
+      await sleep(100)
+      Electronics.beeper.write(0)
+      await sleep(100)
+    }
+  }
 }
 
 Electronics.beeper.write(0)
@@ -34,7 +43,7 @@ class Lock {
       Electronics.motor.write(Lock.#closed)
     } else if (!val && Lock.#locked) {
       Electronics.motor.write(Lock.#opened)
-      beep()
+      Electronics.beep()
     }
     Lock.#locked = val
   }
@@ -56,7 +65,7 @@ class Alarm {
   static set on(val) {
     if (val && !Alarm.#on) {
       let date = new Date()
-      logEvent(getDate(date), getTime(date), 2)
+      (new Event(date, 2)).log()
 
       Alarm.#interval = setInterval(async function() {
         Electronics.beeper.write(1)
@@ -98,6 +107,24 @@ setInterval(function() {
   }
 }, 10)
 
+class Event {
+  constructor(date, event) {
+    let d = new Date(date)
+    this.date = d.toLocaleDateString()
+    this.time = d.toLocaleTimeString()
+    this.event = event
+  }
+
+  async log() {
+    let log = fs.readFileSync("./log.json").toString()
+    log = await JSON.parse(log)
+    log.date.push(this.date)
+    log.time.push(this.time)
+    log.event.push(this.event)
+    fs.writeFileSync("./log.json", JSON.stringify(log))
+  }
+}
+
 function getDate(d) {
   return d.getMonth() + 1 + "/" + d.getDate() + "/" + d.getFullYear()
 }
@@ -121,15 +148,6 @@ async function logEvent(date, time, event) {
   log.time.push(time)
   log.event.push(event)
   fs.writeFileSync("./log.json", JSON.stringify(log))
-}
-
-async function beep() {
-  for (let i = 0; i < 2; i++) {
-    Electronics.beeper.write(1)
-    await sleep(100)
-    Electronics.beeper.write(0)
-    await sleep(100)
-  }
 }
 
 function sleep(ms) {
@@ -210,20 +228,21 @@ app.get("/events(.html)?", function(req, res) {
 
 app.post("^/$|/index(.html)?", function(req, res) {
   let data = req.body
+  if (typeof data.date !== "undefined") {
+    let date = new Date(data.date)
+    (new Event(date, data.event)).log()
+  }
   switch (data.req) {
     case "lock":
-      logEvent(data.date, data.time, data.event)
       Lock.locked = true
       break
     case "unlock":
-      logEvent(data.date, data.time, data.event)
       Lock.locked = false
       break
     case "test":
       Electronics.motor.write(data.value)
       break
     case "alarm stopped":
-      logEvent(data.date, data.time, data.event)
       Alarm.on = false
   }
   res.send("Success")
