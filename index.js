@@ -85,13 +85,11 @@ class Alarm {
   }
 
   static check() {
-    console.log(1)
+    console.log(Alarm.timerList, Alarm.length, Alarm.#on)
     if (Alarm.timerList.length >= Alarm.length && !Alarm.#on) {
-      console.log(2)
       if (Alarm.timerList.slice(-1*Alarm.length).every(function(e) {
         return e <= Alarm.distance
       })) {
-        console.log(3)
         return true
       }
     }
