@@ -185,24 +185,20 @@ app.get("/battery", async function(req, res) {
 
 app.ws("/lock", function(ws, req) {
   Electronics.button.on("change", function(val) {
-    if (!Lock.locked) {
-      if (val == 0) {
-        Lock.locked = true
-        ws.send("locked")
-      }
+    if (val == 0 && !Lock.locked) {
+      Lock.locked = true
+      ws.send("locked")
     }
   })
 })
 
 app.ws("/alarm", function(ws, req) {
   Electronics.button.on("change", function(val) {
-    if (Lock.locked) {
-      if (val == 1) {
-        Alarm.tick()
-        if (Alarm.check()) {
-          Alarm.on = true
-          ws.send("alarm")
-        }
+    if (val == 1 && Lock.locked && !Alarm.on) {
+      Alarm.tick()
+      if (Alarm.check()) {
+        Alarm.on = true
+        ws.send("alarm")
       }
     }
   })
