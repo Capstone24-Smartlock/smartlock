@@ -41,9 +41,11 @@ class Lock {
   static set locked(val) {
     if (val && !Lock.#locked) {
       Electronics.motor.write(Lock.#closed)
+      Event.log(0)
     } else if (!val && Lock.#locked) {
       Electronics.motor.write(Lock.#opened)
       Electronics.beep()
+      Event.log(1)
     }
     Lock.#locked = val
   }
@@ -64,8 +66,7 @@ class Alarm {
 
   static set on(val) {
     if (val && !Alarm.#on) {
-      let date = new Date()
-      (new Event(date, 2)).log()
+      Event.log(2)
 
       Alarm.#interval = setInterval(async function() {
         Electronics.beeper.write(1)
@@ -74,6 +75,7 @@ class Alarm {
         await sleep(100)
       }, 1100)
     } else if (!val && Alarm.#on) {
+      Event.log(3)
       Alarm.timer = 0
       Alarm.timerList = [0]
       clearInterval(Alarm.#interval)
@@ -108,19 +110,12 @@ setInterval(function() {
 }, 10)
 
 class Event {
-  constructor(date, event) {
-    let d = new Date(date)
-    this.date = d.toLocaleDateString()
-    this.time = d.toLocaleTimeString()
-    this.event = event
-  }
-
-  async log() {
+  static async log(event, date=(new Date()).toLocaleString()) {
     let log = fs.readFileSync("./log.json").toString()
     log = await JSON.parse(log)
-    log.date.push(this.date)
-    log.time.push(this.time)
-    log.event.push(this.event)
+    log.date.push(date.toLocaleDateString())
+    log.time.push(date.toLocaleTimeString())
+    log.event.push(event)
     fs.writeFileSync("./log.json", JSON.stringify(log))
   }
 }
@@ -228,10 +223,6 @@ app.get("/events(.html)?", function(req, res) {
 
 app.post("^/$|/index(.html)?", function(req, res) {
   let data = req.body
-  if (typeof data.date !== "undefined") {
-    let date = new Date(data.date)
-    (new Event(date, data.event)).log()
-  }
   switch (data.req) {
     case "lock":
       Lock.locked = true

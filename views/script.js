@@ -22,13 +22,10 @@ class Lock {
     }
 
     static set locked(val) {
-        if (val ^ this.#locked) {
-            if (val) {
-                shaft.querySelectorAll("animateMotion")[1].beginElement()
-            } else {
-                shaft.querySelectorAll("animateMotion")[0].beginElement()
-            }
-            let date = new Date()
+        if (val && !this.#locked) {
+            shaft.querySelectorAll("animateMotion")[1].beginElement()
+        } else if (!val && this.#locked) {
+            shaft.querySelectorAll("animateMotion")[0].beginElement()
             fetch("/", {
                 method: "POST",
                 headers: {
@@ -36,8 +33,6 @@ class Lock {
                 },
                 body: JSON.stringify({
                     req: val ? "lock" : "unlock",
-                    date: date.toLocaleString(),
-                    event: val ? 0 : 1
                 })
             })
         }
@@ -75,8 +70,6 @@ alarmSocket.addEventListener("message", async function(event) {
 })
 
 alarmButton.addEventListener("click", async function() {
-    let date = new Date()
-    
     await fetch("/", {
         method: "POST",
         headers: {
@@ -84,8 +77,6 @@ alarmButton.addEventListener("click", async function() {
         },
         body: JSON.stringify({
             req: "alarm stopped",
-            date: date.toLocaleString(),
-            event: 3
         })
     })
 
