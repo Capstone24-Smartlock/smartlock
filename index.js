@@ -85,10 +85,13 @@ class Alarm {
   }
 
   static check() {
+    console.log(1)
     if (Alarm.timerList.length >= Alarm.length && !Alarm.#on) {
+      console.log(2)
       if (Alarm.timerList.slice(-1*Alarm.length).every(function(e) {
         return e <= Alarm.distance
       })) {
+        console.log(3)
         return true
       }
     }
@@ -205,7 +208,6 @@ app.ws("/alarm", function(ws, req) {
       if (val == 1) {
         Alarm.tick()
         if (Alarm.check()) {
-          console.log(1)
           Alarm.on = true
           ws.send("alarm")
         }
