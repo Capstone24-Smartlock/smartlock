@@ -123,21 +123,20 @@ async function batteryProperties(req) {
       resolve(text)
     })
   }).then(function(data) {
-    return data.split(" ")[1]
+    return data.split(" ")[1].split("").slice(0, -1).join("")
   }).catch(function() {
     return null
   })
 }
 
 async function batteryData() {
-  let val = {
-    level: parseFloat(await batteryProperties("get battery"))/100,
-    isCharging: (await batteryProperties("get battery_power_plugged")) == "true",
+  if (await batteryProperties("get battery") === null) {
+    return null
   }
-
-  console.log(val)
-
-  return val
+  return {
+    level: parseFloat(await batteryProperties("get battery"))/100,
+    isCharging: (await batteryProperties("get battery_power_plugged")).valueOf() === "true".valueOf(),
+  }
 }
 
 app.get("/battery", async function(req, res) {
