@@ -74,7 +74,7 @@ lockSocket.addEventListener("message", async function(event) {
 const alarmSocket = new WebSocket(`${location.origin.replace("http://", "ws://").replace("https://", "wss://")}/alarm`)
 
 alarmSocket.addEventListener("message", async function(event) {
-    alarmButton.style.opacity = 1
+    alarmButton.style.display = "inline"
 })
 
 alarmButton.addEventListener("click", async function() {
@@ -93,7 +93,7 @@ alarmButton.addEventListener("click", async function() {
         })
     })
 
-    alarmButton.style.opacity = 0
+    alarmButton.style.display = "none"
 })
 
 burger.addEventListener("click", function() {
