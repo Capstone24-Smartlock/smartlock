@@ -80,7 +80,7 @@ class Alarm {
   }
 
   static check() {
-    if (Alarm.timerList.length >= Alarm.length && !Alarm.#on) {
+    if (Alarm.timerList.length >= Alarm.length) {
       if (Alarm.timerList.slice(-1*Alarm.length).every(function(e) {
         return e <= Alarm.distance
       })) {
