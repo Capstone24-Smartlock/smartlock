@@ -26,14 +26,14 @@ class Lock {
   static #closed = 0.07
 
   static get locked() {
-    return this.#locked
+    return Lock.#locked
   }
 
   static set locked(val) {
-    if (val && !this.#locked) {
-      Electronics.motor.write(this.#closed)
-    } else if (!val && this.#locked) {
-      Electronics.motor.write(this.#opened)
+    if (val && !Lock.#locked) {
+      Electronics.motor.write(Lock.#closed)
+    } else if (!val && Lock.#locked) {
+      Electronics.motor.write(Lock.#opened)
       beep()
     }
   }
@@ -49,44 +49,44 @@ class Alarm {
   static #interval
 
   static get on() {
-    return this.#on
+    return Alarm.#on
   }
 
   static set on(val) {
-    if (val && !this.#on) {
+    if (val && !Alarm.#on) {
       let date = new Date()
       logEvent(getDate(date), getTime(date), 2)
 
-      this.#interval = setInterval(async function() {
+      Alarm.#interval = setInterval(async function() {
         Electronics.motor.write(1)
         await sleep(1000)
         Electronics.motor.write(0)
         await sleep(100)
       }, 1100)
-    } else if (!val && this.#on) {
-      this.timer = 0
-      this.timerList = [0]
-      clearInterval(this.#interval)
+    } else if (!val && Alarm.#on) {
+      Alarm.timer = 0
+      Alarm.timerList = [0]
+      clearInterval(Alarm.#interval)
       Electronics.beeper.write(0)
     }
 
-    this.#on = val
+    Alarm.#on = val
   }
 
   static tick() {
-    this.timerList.push(this.timer)
-    this.timer = 0
-    if (this.timerList.slice(-10).every(function(e) {
+    Alarm.timerList.push(Alarm.timer)
+    Alarm.timer = 0
+    if (Alarm.timerList.slice(-10).every(function(e) {
       return e <= 1000
     })) {
-      this.on = true
+      Alarm.on = true
     }
   }
 
   static check() {
-    if (Alarm.timerList.length >= this.length && !Alarm.#on) {
-      if (this.timerList.slice(-1*this.length).every(function(e) {
-        return e <= this.distance
+    if (Alarm.timerList.length >= Alarm.length && !Alarm.#on) {
+      if (Alarm.timerList.slice(-1*Alarm.length).every(function(e) {
+        return e <= Alarm.distance
       })) {
         return true
       }
