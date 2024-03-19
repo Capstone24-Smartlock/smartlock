@@ -111,6 +111,7 @@ setInterval(function() {
 
 class Event {
   static async log(event, date=(new Date()).toLocaleString()) {
+    console.log(date)
     let d = new Date(date)
     let log = fs.readFileSync("./log.json").toString()
     log = await JSON.parse(log)
