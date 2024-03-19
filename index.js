@@ -202,7 +202,7 @@ app.ws("/alarm", function(ws, req) {
   Electronics.button.on("change", function(val) {
     if (Lock.locked) {
       if (val == 1) {
-        tick()
+        Alarm.tick()
         if (Alarm.check()) {
           Alarm.on = true
           ws.send("alarm")
