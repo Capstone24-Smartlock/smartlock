@@ -113,6 +113,8 @@ class Event {
   static async log(event, date=(new Date()).toLocaleString()) {
     console.log(date)
     let d = new Date(date)
+    console.log(d)
+    console.log(d.toLocaleDateString())
     let log = fs.readFileSync("./log.json").toString()
     log = await JSON.parse(log)
     log.date.push(d.toLocaleDateString())
