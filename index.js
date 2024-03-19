@@ -117,6 +117,7 @@ async function batteryProperties(req) {
       resolve(data.toString())
     })
   }).then(function(data) {
+    console.log(data)
     return data.split(" ")[1]
   })
 }
