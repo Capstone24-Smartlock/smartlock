@@ -77,11 +77,6 @@ class Alarm {
   static tick() {
     Alarm.timerList.push(Alarm.timer)
     Alarm.timer = 0
-    if (Alarm.timerList.slice(-10).every(function(e) {
-      return e <= 1000
-    })) {
-      Alarm.on = true
-    }
   }
 
   static check() {
