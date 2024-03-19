@@ -15,32 +15,34 @@ const chargingIcon = document.getElementById("chargingIcon")
 const alarmButton = document.getElementById("alarm")
 
 class Lock {
-    static lockedVar = true
+    static #locked = true
 
     static get locked() {
-        return Lock.lockedVar
+        return this.#locked
     }
 
     static set locked(val) {
-        if (val) {
-            shaft.querySelectorAll("animateMotion")[1].beginElement()
-        } else {
-            shaft.querySelectorAll("animateMotion")[0].beginElement()
-        }
-        let date = new Date()
-        fetch("/", {
-            method: "POST",
-            headers: {
-                "content-type": "application/json",
-            },
-            body: JSON.stringify({
-                req: val ? "lock" : "unlock",
-                date: getDate(date),
-                time: getTime(date),
-                event: val ? 0 : 1
+        if (val ^ this.#locked) {
+            if (val) {
+                shaft.querySelectorAll("animateMotion")[1].beginElement()
+            } else {
+                shaft.querySelectorAll("animateMotion")[0].beginElement()
+            }
+            let date = new Date()
+            fetch("/", {
+                method: "POST",
+                headers: {
+                    "content-type": "application/json",
+                },
+                body: JSON.stringify({
+                    req: val ? "lock" : "unlock",
+                    date: getDate(date),
+                    time: getTime(date),
+                    event: val ? 0 : 1
+                })
             })
-        })
-        Lock.lockedVar = val
+        }
+        this.#locked = val
     }
 }
 
@@ -66,16 +68,13 @@ unlock.addEventListener("click", async function() {
 const lockSocket = new WebSocket(`${location.origin.replace("http://", "ws://").replace("https://", "wss://")}/lock`)
 
 lockSocket.addEventListener("message", async function(event) {
-    switch (event.data) {
-        case "closed":
-            if (!Lock.locked) {
-                Lock.locked = true
-            }
-            break
-        case "alarm":
-            alarmButton.style.opacity = 1
-            break
-    }
+    Lock.locked = true
+})
+
+const alarmSocket = new WebSocket(`${location.origin.replace("http://", "ws://").replace("https://", "wss://")}/alarm`)
+
+alarmSocket.addEventListener("message", async function(event) {
+    alarmButton.style.opacity = 1
 })
 
 alarmButton.addEventListener("click", async function() {

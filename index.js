@@ -9,42 +9,98 @@ const express = require('express')
 const app = express()
 const ws = require("express-ws")(app)
 
-global.motor = new pwm.SoftPWM(5)
-global.beeper = new gpio.DigitalOutput(1)
-global.beeper.write(0)
-global.button = new gpio.DigitalInput({
-  pin: 26,
-  pullResistor: gpio.PULL_UP,
-})
+class Electronics {
+  static motor = new pwm.SoftPWM(5)
+  static beeper = new gpio.DigitalOutput(1)
+  static button = new gpio.DigitalInput({
+    pin: 26,
+    pullResistor: gpio.PULL_UP,
+  })
+}
 
-global.locked = true
+Electronics.beeper.write(0)
 
-global.timer = 0
-global.timerList = [0]
+class Lock {
+  static #locked = true
+  static #opened = 0.03
+  static #closed = 0.07
+
+  static get locked() {
+    return this.#locked
+  }
+
+  static set locked(val) {
+    if (val && !this.#locked) {
+      Electronics.motor.write(this.#closed)
+    } else if (!val && this.#locked) {
+      Electronics.motor.write(this.#opened)
+      beep()
+    }
+  }
+}
+
+class Alarm {
+  static timer = 0
+  static timerList = [0]
+  static length = 10
+  static distance = 1000
+
+  static #on = false
+  static #interval
+
+  static get on() {
+    return this.#on
+  }
+
+  static set on(val) {
+    if (val && !this.#on) {
+      let date = new Date()
+      logEvent(getDate(date), getTime(date), 2)
+
+      this.#interval = setInterval(async function() {
+        Electronics.motor.write(1)
+        await sleep(1000)
+        Electronics.motor.write(0)
+        await sleep(100)
+      }, 1100)
+    } else if (!val && this.#on) {
+      this.timer = 0
+      this.timerList = [0]
+      clearInterval(this.#interval)
+      Electronics.beeper.write(0)
+    }
+
+    this.#on = val
+  }
+
+  static tick() {
+    this.timerList.push(this.timer)
+    this.timer = 0
+    if (this.timerList.slice(-10).every(function(e) {
+      return e <= 1000
+    })) {
+      this.on = true
+    }
+  }
+
+  static check() {
+    if (Alarm.timerList.length >= this.length && !Alarm.#on) {
+      if (this.timerList.slice(-1*this.length).every(function(e) {
+        return e <= this.distance
+      })) {
+        return true
+      }
+    }
+    return false
+  }
+}
 
 setInterval(function() {
-  global.timer += 10
-  if (global.timerList.length > 25) {
-    global.timerList = global.timerList.slice(-25)
+  Alarm.timer += 10
+  if (Alarm.timerList.length > Alarm.length + 5) {
+    Alarm.timerList = Alarm.timerList.slice(-1*(Alarm.length + 5))
   }
 }, 10)
-
-global.alarmOn = false
-
-async function alarm() {
-  global.alarmOn = true
-
-  let date = new Date()
-  logEvent(getDate(date), getTime(date), 2)
-  
-  let toggle = false
-  global.alarmInterval = setInterval(async function() {
-    global.beeper.write(1)
-    await sleep(1000)
-    global.beeper.write(0)
-    await sleep(100)
-  }, 1100)
-}
 
 function getDate(d) {
   return d.getMonth() + 1 + "/" + d.getDate() + "/" + d.getFullYear()
@@ -73,27 +129,17 @@ async function logEvent(date, time, event) {
 
 async function beep() {
   for (let i = 0; i < 2; i++) {
-    global.beeper.write(1)
+    Electronics.beeper.write(1)
     await sleep(100)
-    global.beeper.write(0)
+    Electronics.beeper.write(0)
     await sleep(100)
   }
 }
 
-function open() {
-  global.locked = false
-  global.motor.write(0.03)
-}
-
-function close() {
-  global.locked = true
-  global.motor.write(0.07)
-}
-
 function sleep(ms) {
   return new Promise((resolve) => {
-    setTimeout(resolve, ms);
-  });
+    setTimeout(resolve, ms)
+  })
 }
 
 app.use(express.static("views"))
@@ -141,29 +187,30 @@ app.get("/battery", async function(req, res) {
   res.send(JSON.stringify(await batteryData()))
 })
 
-app.ws('/lock', function(ws, req) {
-  button.on("change", function(val) {
-    if (!global.locked) {
+app.ws("/lock", function(ws, req) {
+  Electronics.button.on("change", function(val) {
+    if (!Lock.locked) {
       if (val == 0) {
         close()
         ws.send("closed")
       }
-    } else {
+    }
+  })
+})
+
+app.ws("/alarm", function(ws, req) {
+  Electronics.button.on("change", function(val) {
+    if (Lock.locked) {
       if (val == 1) {
-        global.timerList.push(global.timer)
-        global.timer = 0
-        if (global.timerList.length >= 10 && !global.alarmOn) {
-          if (global.timerList.slice(-10).every(function(e) {
-            return e <= 1000
-          })) {
-            alarm()
-            ws.send("alarm")
-          }
+        tick()
+        if (Alarm.check()) {
+          Alarm.on = true
+          ws.send("alarm")
         }
       }
     }
-  });
-});
+  })
+})
 
 app.get("/events(.html)?", function(req, res) {
   res.send(fs.readFileSync("./log.json").toString())
@@ -173,24 +220,19 @@ app.post("^/$|/index(.html)?", function(req, res) {
   let data = req.body
   switch (data.req) {
     case "lock":
-      close()
       logEvent(data.date, data.time, data.event)
+      Lock.locked = true
       break
     case "unlock":
-      open()
       logEvent(data.date, data.time, data.event)
-      beep()
+      Lock.locked = false
       break
     case "test":
-      global.motor.write(data.value)
+      Electronics.motor.write(data.value)
       break
     case "alarm stopped":
       logEvent(data.date, data.time, data.event)
-      global.alarmOn = false
-      global.timerList = [0]
-      global.timer = 0
-      clearInterval(global.alarmInterval)
-      global.beeper.write(0)
+      Alarm.on = false
   }
   res.send("Success")
 })
@@ -200,5 +242,5 @@ app.listen(8080, function() {
 })
 
 process.on("exit", function() {
-  global.beeper.write(0)
+  Electronics.beeper.write(0)
 })
