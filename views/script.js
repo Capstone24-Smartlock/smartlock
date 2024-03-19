@@ -59,9 +59,7 @@ async function setMotor(val) {
 }
 
 unlock.addEventListener("click", async function() {
-    if (Lock.locked) {
-        Lock.locked = false
-    }
+    Lock.locked = false
 })
 
 const lockSocket = new WebSocket(`${location.origin.replace("http://", "ws://").replace("https://", "wss://")}/lock`)
