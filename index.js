@@ -126,7 +126,7 @@ async function batteryProperties(req) {
   }).then(function(data) {
     return data.split(" ")[1]
   }).catch(function() {
-    return null
+    return NaN
   })
 }
 
