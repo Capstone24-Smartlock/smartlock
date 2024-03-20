@@ -1,12 +1,13 @@
-const events = document.getElementById("events")
-const load = document.getElementById("load")
-
 class LogEvent {
     static events = []
     static log
     static eventsPerLoad = 20
 
+    static eventTable = document.getElementById("events")
+    static loadButton = document.getElementById("load")
+
     static * #updateGen() {
+        this.loadButton.style.visibility = "visible"
         for (let i = 0; i < Math.ceil(this.log.date.length/this.eventsPerLoad); i++) {
             for (let event = 0; event < this.eventsPerLoad; event++) {
                 try {
@@ -19,7 +20,11 @@ class LogEvent {
             }
             yeild
         }
+        this.loadButton.style.visibility = "hidden"
+        return true
     }
+
+    static update = this.#updateGen()
 
     constructor(date, time, event) {
         this.date = date
@@ -65,9 +70,17 @@ class LogEvent {
             elem.innerHTML = items[i]
             row.appendChild(elem)
         }
-        this.row = row
+        this.eventTable.appendChild(row)
     }
 }
+
+window.addEventListener("load", function() {
+    LogEvent.update.next()
+})
+
+LogEvent.loadButton.addEventListener("click", function() {
+    LogEvent.update.next()
+})
 
 fetch("/events").then(function(res) {
     return res.json()
