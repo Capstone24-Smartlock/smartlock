@@ -198,27 +198,6 @@ app.ws("/button", function(ws, req) {
   })
 })
 
-// app.ws("/lock", function(ws, req) {
-//   Electronics.button.on("change", function(val) {
-//     if (val == 0 && !Lock.locked) {
-//       Lock.locked = true
-//       ws.send("locked")
-//     }
-//   })
-// })
-
-// app.ws("/alarm", function(ws, req) {
-//   Electronics.button.on("change", function(val) {
-//     if (val == 1 && Lock.locked && !Alarm.on) {
-//       Alarm.tick()
-//       if (Alarm.check()) {
-//         Alarm.on = true
-//         ws.send("alarm")
-//       }
-//     }
-//   })
-// })
-
 app.get("/events(.html)?", function(req, res) {
   res.send(fs.readFileSync("./log.json").toString())
 })

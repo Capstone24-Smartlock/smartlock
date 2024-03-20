@@ -1,21 +1,15 @@
 const s = "http://www.w3.org/2000/svg"
 const x = "http://www.w3.org/1999/xlink"
 
-const unlock = document.getElementById("unlock")
-const shaft = document.getElementById("shaft")
-
 const burger = document.getElementById("burger")
 const sidepanel = document.getElementById("sidepanel")
 const coverpanel = document.getElementById("coverpanel")
 
-const power = document.getElementById("power")
-const powertext = document.getElementById("powertext")
-const chargingIcon = document.getElementById("chargingIcon")
-
-const alarmButton = document.getElementById("alarm")
-
 class Lock {
     static #locked = true
+
+    static button = document.getElementById("unlock")
+    static shaft = document.getElementById("shaft")
 
     static get locked() {
         return this.#locked
@@ -23,20 +17,99 @@ class Lock {
 
     static set locked(val) {
         if (val && !this.#locked) {
-            shaft.querySelectorAll("animateMotion")[1].beginElement()
+            this.shaft.querySelectorAll("animateMotion")[1].beginElement()
         } else if (!val && this.#locked) {
-            shaft.querySelectorAll("animateMotion")[0].beginElement()
+            this.shaft.querySelectorAll("animateMotion")[0].beginElement()
             fetch("/", {
                 method: "POST",
                 headers: {
                     "content-type": "application/json",
                 },
                 body: JSON.stringify({
-                    req: val ? "lock" : "unlock",
+                    req: "unlock",
                 })
             })
         }
         this.#locked = val
+    }
+}
+
+Lock.button.addEventListener("click", async function() {
+    Lock.locked = false
+})
+
+class Alarm {
+    static #on = false
+
+    static button = document.getElementById("alarm")
+
+    static get on() {
+        return this.#on
+    }
+
+    static set on(val) {
+        if (val && !this.#on) {
+            this.button.style.visibility = "visible"
+        } else if (!val && this.#on) {
+            fetch("/", {
+                method: "POST",
+                headers: {
+                    "content-type": "application/json",
+                },
+                body: JSON.stringify({
+                    req: "alarm stopped",
+                })
+            })
+
+            this.button.style.visibility = "hidden"
+        }
+    }
+}
+
+Alarm.button.addEventListener("click", async function() {
+    Alarm.on = false
+})
+
+class Battery {
+    static power = document.getElementById("power")
+    static powertext = document.getElementById("powertext")
+    static chargingIcon = document.getElementById("chargingIcon")
+
+    static setPower(percentage, charging=false) {
+        let circumference = 2*Math.PI*parseInt(this.power.getAttributeNS(null, "r"))
+    
+        this.power.style.strokeDasharray = `${Math.floor(circumference*percentage)} ${Math.floor(circumference*(1-percentage))}`
+    
+        percentage = Math.round(percentage*100)
+        this.powertext.innerHTML = `${percentage}%`
+        if (percentage > 60 || charging) {
+            this.power.style.stroke = "#5BC236"
+        } else if (percentage <= 20) {
+            this.power.style.stroke = "#FF0000"
+        } else {
+            this.power.style.stroke = "#ffe200"
+        }
+
+        if (charging) {
+            this.chargingIcon.setAttributeNS(null, "y", "-250")
+        } else {
+            this.chargingIcon.setAttributeNS(null, "y", "-2000")
+        }
+    }
+
+    static async update() {
+        let battery = await fetch("/battery").then(function(res) {
+            return res.json()
+        }).then(function(json) {
+            if (json === null) {
+                json = {
+                    level: 1,
+                    isCharging: false,
+                }
+            }
+            return json
+        })
+        this.setPower(Math.floor(battery.level*100)/100, battery.isCharging)
     }
 }
 
@@ -53,36 +126,17 @@ async function setMotor(val) {
     })
 }
 
-unlock.addEventListener("click", async function() {
-    Lock.locked = false
-})
-
 const buttonSocket = new WebSocket(`${location.origin.replace("http://", "ws://").replace("https://", "wss://")}/button`)
 
 buttonSocket.addEventListener("message", async function(event) {
-    console.log(event)
     switch (event.data) {
         case "locked":
             Lock.locked = true
             break
         case "alarm":
-            alarmButton.style.visibility = "visible"
+            Alarm.on = true
             break
     }
-})
-
-alarmButton.addEventListener("click", async function() {
-    await fetch("/", {
-        method: "POST",
-        headers: {
-            "content-type": "application/json",
-        },
-        body: JSON.stringify({
-            req: "alarm stopped",
-        })
-    })
-
-    alarmButton.style.visibility = "hidden"
 })
 
 burger.addEventListener("click", function() {
@@ -97,46 +151,6 @@ coverpanel.addEventListener("click", function() {
     coverpanel.style.height = "0"
 })
 
-function setPower(percentage, charging=false) {
-    let circumference = 2*Math.PI*parseInt(power.getAttributeNS(null, "r"))
-
-    power.style.strokeDasharray = `${Math.floor(circumference*percentage)} ${Math.floor(circumference*(1-percentage))}`
-
-    percentage = Math.round(percentage*100)
-    powertext.innerHTML = `${percentage}%`
-    if (percentage > 60 || charging) {
-        power.style.stroke = "#5BC236"
-    } else if (percentage <= 20) {
-        power.style.stroke = "#FF0000"
-    } else {
-        power.style.stroke = "#ffe200"
-    }
-}
-
-function isCharging(bool) {
-    if (bool) {
-        chargingIcon.setAttributeNS(null, "y", "-250")
-    } else {
-        chargingIcon.setAttributeNS(null, "y", "-2000")
-    }
-}
-
-async function getPowerLevel() {
-    let battery = await fetch("/battery").then(function(res) {
-        return res.json()
-    }).then(function(json) {
-        if (json === null) {
-            json = {
-                level: 1,
-                isCharging: false,
-            }
-        }
-        return json
-    })
-    setPower(Math.floor(battery.level*100)/100, battery.isCharging)
-    isCharging(battery.isCharging)
-}
-
 async function getData() {
     let data = await fetch("/data").then(function(res) {
         return res.json()
@@ -145,16 +159,15 @@ async function getData() {
     })
 
     Lock.locked = data.locked
-    alarmButton.style.visibility = data.alarmOn ? "visible" : "hidden"
-    console.log(data.alarmOn)
+    Alarm.on = data.alarmOn
 }
 
 window.addEventListener("load", function() {
     console.log("load")
     getData()
-    getPowerLevel()
+    Battery.update()
 })
 
 setInterval(function() {
-    getPowerLevel()
+    Battery.update()
 }, 10000)
