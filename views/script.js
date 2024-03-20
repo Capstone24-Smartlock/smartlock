@@ -144,6 +144,7 @@ async function getData() {
 
     Lock.locked = data.locked
     alarmButton.style.hidden = data.alarmOn ? "visible" : "hidden"
+    console.log(data.alarmOn)
 }
 
 window.addEventListener("load", function() {
