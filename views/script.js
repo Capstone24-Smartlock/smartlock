@@ -143,7 +143,7 @@ async function getData() {
     })
 
     Lock.locked = data.locked
-    alarmButton.style.hidden = data.alarmOn ? "visible" : "hidden"
+    alarmButton.style.visibility = data.alarmOn ? "visible" : "hidden"
     console.log(data.alarmOn)
 }
 
