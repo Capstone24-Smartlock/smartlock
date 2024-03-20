@@ -139,7 +139,7 @@ app.get("^/$|/index(.html)?", function(req, res) {
 })
 
 app.get("/data", function(req, res) {
-  res.send(JOSN.stringify({
+  res.send(JSON.stringify({
     locked: Lock.locked,
     alarmOn: Alarm.on,
   }))
