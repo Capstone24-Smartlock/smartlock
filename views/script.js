@@ -135,23 +135,13 @@ function getPowerLevel() {
     })
 }
 
-function getDate(d) {
-    return d.getMonth() + 1 + "/" + d.getDate() + "/" + d.getFullYear()
-}
-
-function getTime(d) {
-    let hour = d.getHours()
-    let morning = hour < 11
-    if (hour == 0) {
-        hour = 12
-    } else if (hour >= 13) {
-        hour -= 12
-    }
-
-    return hour + ":" + d.getMinutes().toString().padStart(2, "0") + ":" + d.getSeconds().toString().padStart(2, "0") + " " + (morning ? "AM" : "PM")
-}
-
 window.addEventListener("load", function() {
+    fetch("/data").then(function(res) {
+        return res.json()
+    }).then(function(json) {
+        Lock.locked = json.locked
+        alarmButton.style.hidden = json.alarmOn ? "visible" : "hidden"
+    })
     getPowerLevel()
 })
 
