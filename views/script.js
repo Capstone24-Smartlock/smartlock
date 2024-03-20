@@ -136,12 +136,12 @@ function getPowerLevel() {
 }
 
 window.addEventListener("load", function() {
-    fetch("/data").then(function(res) {
-        return res.json()
-    }).then(function(json) {
-        Lock.locked = json.locked
-        alarmButton.style.hidden = json.alarmOn ? "visible" : "hidden"
-    })
+    // fetch("/data").then(function(res) {
+    //     return res.json()
+    // }).then(function(json) {
+    //     Lock.locked = json.locked
+    //     alarmButton.style.hidden = json.alarmOn ? "visible" : "hidden"
+    // })
     getPowerLevel()
 })
 
