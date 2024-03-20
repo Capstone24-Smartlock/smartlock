@@ -12,7 +12,7 @@ class LogEvent {
         for (let i = 0; i < Math.ceil(LogEvent.log.date.length/LogEvent.eventsPerLoad); i++) {
             for (let event = 0; event < LogEvent.eventsPerLoad; event++) {
                 let index = i*LogEvent.eventsPerLoad + event
-                if (typeof LogEvent.date[index] !== "undefined") {
+                if (typeof LogEvent.log.date[index] !== "undefined") {
                     let eve = new LogEvent(LogEvent.log.date[index], LogEvent.log.time[index], LogEvent.log.event[index])
                     eve.createRow()
                 } else {
