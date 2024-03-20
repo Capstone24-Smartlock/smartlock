@@ -74,7 +74,7 @@ class LogEvent {
         this.eventTable.appendChild(row)
     }
 }
-
+//asdasd
 window.addEventListener("load", async function() {
     LogEvent.log = await fetch("/events").then(function(res) {
         return res.json()
