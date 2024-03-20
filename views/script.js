@@ -57,16 +57,15 @@ unlock.addEventListener("click", async function() {
     Lock.locked = false
 })
 
-const lockSocket = new WebSocket(`${location.origin.replace("http://", "ws://").replace("https://", "wss://")}/lock`)
+const buttonSocket = new WebSocket(`${location.origin.replace("http://", "ws://").replace("https://", "wss://")}/button`)
 
-lockSocket.addEventListener("message", async function(event) {
+buttonSocket.addEventListener("message", async function(event) {
+    if (event.message = "locked") {
+        Lock.locked = true
+    } else if (event.message = "alarm") {
+        alarmButton.style.visibility = "visible"
+    }
     Lock.locked = true
-})
-
-const alarmSocket = new WebSocket(`${location.origin.replace("http://", "ws://").replace("https://", "wss://")}/alarm`)
-
-alarmSocket.addEventListener("message", async function(event) {
-    alarmButton.style.visibility = "visible"
 })
 
 alarmButton.addEventListener("click", async function() {
