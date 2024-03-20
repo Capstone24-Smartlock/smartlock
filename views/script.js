@@ -63,6 +63,7 @@ class Alarm {
 
             this.button.style.visibility = "hidden"
         }
+        this.#on = val
     }
 }
 
