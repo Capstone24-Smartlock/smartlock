@@ -9,11 +9,11 @@ class LogEvent {
     static *updateGen() {
         console.log("Run")
         this.loadButton.style.visibility = "visible"
-        for (let i = 0; i < Math.ceil(this.log.date.length/this.eventsPerLoad); i++) {
-            for (let event = 0; event < this.eventsPerLoad; event++) {
+        for (let i = 0; i < Math.ceil(LogEvent.log.date.length/LogEvent.eventsPerLoad); i++) {
+            for (let event = 0; event < LogEvent.eventsPerLoad; event++) {
                 try {
-                    let index = i*this.eventsPerLoad + event
-                    let eve = new LogEvent(this.log.date[index], this.log.time[index], this.log.event[index])
+                    let index = i*LogEvent.eventsPerLoad + event
+                    let eve = new LogEvent(LogEvent.log.date[index], LogEvent.log.time[index], LogEvent.log.event[index])
                     eve.createRow()
                 } catch {
                     break
@@ -71,7 +71,7 @@ class LogEvent {
             elem.innerHTML = items[i]
             row.appendChild(elem)
         }
-        this.eventTable.appendChild(row)
+        LogEvent.eventTable.appendChild(row)
     }
 }
 //asdasd
