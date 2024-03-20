@@ -43,3 +43,11 @@ th {
 #events {
     border-collapse: collapse;
 }
+
+#load {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top:10px;
+    visibility: hidden;
+}

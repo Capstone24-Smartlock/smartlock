@@ -1,10 +1,32 @@
-var events = document.getElementById("events")
+const events = document.getElementById("events")
+const load = document.getElementById("load")
 
 class LogEvent {
+    static events = []
+    static log
+    static eventsPerLoad = 20
+
+    static * #updateGen() {
+        for (let i = 0; i < Math.ceil(this.log.date.length/this.eventsPerLoad); i++) {
+            for (let event = 0; event < this.eventsPerLoad; event++) {
+                try {
+                    let index = i*this.eventsPerLoad + event
+                    let eve = new LogEvent(this.log.date[index], this.log.time[index], this.log.event[index])
+                    eve.createRow()
+                } catch {
+                    break
+                }
+            }
+            yeild
+        }
+    }
+
     constructor(date, time, event) {
         this.date = date
         this.time = time
         this.event = event
+
+        LogEvent.events.push(this)
     }
 
     get message() {
@@ -34,7 +56,7 @@ class LogEvent {
         }
     }
 
-    get row() {
+    createRow() {
         let row = document.createElement("tr")
         let items = [this.date, this.time, this.message]
         for (let i = 0; i < items.length; i++) {
@@ -43,18 +65,12 @@ class LogEvent {
             elem.innerHTML = items[i]
             row.appendChild(elem)
         }
-        return row
+        this.row = row
     }
 }
-
-var eve = []
 
 fetch("/events").then(function(res) {
     return res.json()
 }).then(function(data) {
-    for (i = data.date.length - 1; i >= 0; i--) {
-        let event = new LogEvent(data.date[i], data.time[i], data.event[i])
-        eve.push(event)
-        events.appendChild(event.row)
-    }
+    LogEvent.log = data
 })
