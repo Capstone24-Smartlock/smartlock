@@ -6,7 +6,8 @@ class LogEvent {
     static eventTable = document.getElementById("events")
     static loadButton = document.getElementById("load")
 
-    static * #updateGen() {
+    static *updateGen() {
+        console.log("Run")
         this.loadButton.style.visibility = "visible"
         for (let i = 0; i < Math.ceil(this.log.date.length/this.eventsPerLoad); i++) {
             for (let event = 0; event < this.eventsPerLoad; event++) {
@@ -24,7 +25,7 @@ class LogEvent {
         return true
     }
 
-    static update = this.#updateGen()
+    static update = this.updateGen()
 
     constructor(date, time, event) {
         this.date = date
@@ -74,16 +75,16 @@ class LogEvent {
     }
 }
 
-window.addEventListener("load", function() {
+window.addEventListener("load", async function() {
+    LogEvent.data = await fetch("/events").then(function(res) {
+        return res.json()
+    }).then(function(data) {
+        return data
+    })
+
     LogEvent.update.next()
 })
 
 LogEvent.loadButton.addEventListener("click", function() {
     LogEvent.update.next()
-})
-
-fetch("/events").then(function(res) {
-    return res.json()
-}).then(function(data) {
-    LogEvent.log = data
 })
