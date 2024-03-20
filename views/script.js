@@ -60,12 +60,14 @@ unlock.addEventListener("click", async function() {
 const buttonSocket = new WebSocket(`${location.origin.replace("http://", "ws://").replace("https://", "wss://")}/button`)
 
 buttonSocket.addEventListener("message", async function(event) {
-    if (event.message = "locked") {
-        Lock.locked = true
-    } else if (event.message = "alarm") {
-        alarmButton.style.visibility = "visible"
+    switch (event.message) {
+        case "locked":
+            Lock.locked = true
+            break
+        case "alarm":
+            alarmButton.style.visibility = "visible"
+            break
     }
-    Lock.locked = true
 })
 
 alarmButton.addEventListener("click", async function() {
