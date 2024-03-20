@@ -16,7 +16,8 @@ class LogEvent {
                     let eve = new LogEvent(LogEvent.log.date[index], LogEvent.log.time[index], LogEvent.log.event[index])
                     eve.createRow()
                 } catch {
-                    break
+                    this.loadButton.style.visibility = "hidden"
+                    return
                 }
             }
             yield
