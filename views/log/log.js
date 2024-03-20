@@ -76,7 +76,7 @@ class LogEvent {
 }
 
 window.addEventListener("load", async function() {
-    LogEvent.data = await fetch("/events").then(function(res) {
+    LogEvent.log = await fetch("/events").then(function(res) {
         return res.json()
     }).then(function(data) {
         return data
