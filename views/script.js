@@ -119,8 +119,8 @@ function isCharging(bool) {
     }
 }
 
-function getPowerLevel() {
-    fetch("/battery").then(function(res) {
+async function getPowerLevel() {
+    let battery = await fetch("/battery").then(function(res) {
         return res.json()
     }).then(function(json) {
         if (json === null) {
@@ -129,20 +129,26 @@ function getPowerLevel() {
                 isCharging: false,
             }
         }
-        setPower(Math.floor(json.level*100)/100, json.isCharging)
-        isCharging(json.isCharging)
-        return
+        return json
     })
+    setPower(Math.floor(battery.level*100)/100, battery.isCharging)
+    isCharging(battery.isCharging)
+}
+
+async function getData() {
+    let data = await fetch("/data").then(function(res) {
+        return res.json()
+    }).then(function(json) {
+        return json
+    })
+
+    Lock.locked = data.locked
+    alarmButton.style.hidden = data.alarmOn ? "visible" : "hidden"
 }
 
 window.addEventListener("load", function() {
     console.log("load")
-    // fetch("/data").then(function(res) {
-    //     return res.json()
-    // }).then(function(json) {
-    //     Lock.locked = json.locked
-    //     alarmButton.style.hidden = json.alarmOn ? "visible" : "hidden"
-    // })
+    getData()
     getPowerLevel()
 })
 
