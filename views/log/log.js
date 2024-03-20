@@ -1,7 +1,7 @@
 class LogEvent {
     static events = []
     static log
-    static eventsPerLoad = 20
+    static eventsPerLoad = 50
 
     static eventTable = document.getElementById("events")
     static loadButton = document.getElementById("load")
