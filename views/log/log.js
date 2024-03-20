@@ -19,7 +19,7 @@ class LogEvent {
                     break
                 }
             }
-            yeild
+            yield
         }
         this.loadButton.style.visibility = "hidden"
         return true
