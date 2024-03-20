@@ -136,6 +136,7 @@ function getPowerLevel() {
 }
 
 window.addEventListener("load", function() {
+    console.log("load")
     // fetch("/data").then(function(res) {
     //     return res.json()
     // }).then(function(json) {
