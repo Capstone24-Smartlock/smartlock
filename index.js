@@ -112,9 +112,14 @@ setInterval(function() {
 class Event {
   static async log(event, date=new Date()) {
     let log = fs.readFileSync("./log.json").toString()
-    log = await JSON.parse(log)
-    log.date.push(date.toLocaleDateString())
-    log.time.push(date.toLocaleTimeString())
+    log = JSON.parse(log)
+    log.date.push(date.toLocaleDateString(undefined, {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    }))
+    log.time.push(date.toLocaleTimeString("en-US"))
     log.event.push(event)
     fs.writeFileSync("./log.json", JSON.stringify(log))
   }
@@ -131,6 +136,11 @@ app.use(express.json())
 
 app.get("^/$|/index(.html)?", function(req, res) {
   res.sendFile(path.join(__dirname, "/views/index.html"))
+})
+
+app.get("/data", function(req, res) {
+
+  res.send()
 })
 
 app.get("/log(.html)?", function(req, res) {
