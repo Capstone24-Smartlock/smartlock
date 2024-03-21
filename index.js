@@ -111,7 +111,7 @@ setInterval(function() {
 
 class Event {
   static async log(event, date=new Date()) {
-    let log = fs.readFileSync("./log.json").toString()
+    let log = Event.file
     log = JSON.parse(log)
     log.date = [date.toLocaleDateString(undefined, {
       weekday: "long",
@@ -121,7 +121,15 @@ class Event {
     }), ...log.date]
     log.time = [date.toLocaleTimeString("en-US"), ...log.time]
     log.event = [event, ...log.event]
-    fs.writeFileSync(path.join(__dirname, "/log.json"), JSON.stringify(log))
+    Event.file = JSON.stringify(log)
+  }
+
+  static get file() {
+    return fs.readFileSync(path.join(__dirname, "/log.json")).toString()
+  }
+
+  static set file(val) {
+    fs.writeFileSync(path.join(__dirname, "/log.json", val))
   }
 }
 
@@ -146,7 +154,7 @@ app.get("/data", function(req, res) {
 })
 
 app.get("/log(.html)?", function(req, res) {
-  res.sendFile(path.join(__dirname, "/views/log/log.html"))
+  res.sendFile(Event.file)
 })
 
 async function batteryProperties(req) {
