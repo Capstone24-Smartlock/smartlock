@@ -129,7 +129,7 @@ class Event {
   }
 
   static set file(val) {
-    fs.writeFileSync(path.join(__dirname, "/log.json", val))
+    fs.writeFileSync(path.join(__dirname, "/log.json"), val)
   }
 }
 
