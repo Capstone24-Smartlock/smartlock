@@ -154,7 +154,7 @@ app.get("/data", function(req, res) {
 })
 
 app.get("/log(.html)?", function(req, res) {
-  res.sendFile(Event.file)
+  res.sendFile(path.join(__dirname, "/views/log/log.html"))
 })
 
 async function batteryProperties(req) {
@@ -207,7 +207,7 @@ app.ws("/button", function(ws, req) {
 })
 
 app.get("/events(.html)?", function(req, res) {
-  res.send(fs.readFileSync(path.join(__dirname, "/log.json")).toString())
+  res.send(Event.file)
 })
 
 app.post("^/$|/index(.html)?", function(req, res) {
