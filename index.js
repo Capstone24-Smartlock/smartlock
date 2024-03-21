@@ -121,7 +121,7 @@ class Event {
     }), ...log.date]
     log.time = [date.toLocaleTimeString("en-US"), ...log.time]
     log.event = [event, ...log.event]
-    fs.writeFileSync("./log.json", JSON.stringify(log))
+    fs.writeFileSync(path.join(__dirname, "/log.json"), JSON.stringify(log))
   }
 }
 
@@ -131,7 +131,7 @@ function sleep(ms) {
   })
 }
 
-app.use(express.static("/srv/smartlock/views"))
+app.use(express.static(path.join(__dirname, "/views")))
 app.use(express.json())
 
 app.get("^/$|/index(.html)?", function(req, res) {
@@ -199,7 +199,7 @@ app.ws("/button", function(ws, req) {
 })
 
 app.get("/events(.html)?", function(req, res) {
-  res.send(fs.readFileSync("./log.json").toString())
+  res.send(fs.readFileSync(path.join(__dirname, "/log.json")).toString())
 })
 
 app.post("^/$|/index(.html)?", function(req, res) {
