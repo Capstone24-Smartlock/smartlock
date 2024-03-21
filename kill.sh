@@ -1,0 +1,1 @@
+sudo tmux kill-session -t "smartlock"
