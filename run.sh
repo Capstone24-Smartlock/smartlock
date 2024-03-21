@@ -1,1 +1,1 @@
-screen -S "smartlock" sudo node /srv/smartlock/index.js
+screen -dmS "smartlock" sudo node /srv/smartlock/index.js
