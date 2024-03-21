@@ -1,0 +1,1 @@
+screen -t "smartlock" sudo node /srv/smartlock/index.js
