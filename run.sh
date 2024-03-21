@@ -1,1 +1,1 @@
-sudo tmux new -s "smartlock" -c sudo node /srv/smartlock/index.js
+sudo tmux new -s "smartlock" -u dylan -c sudo node /srv/smartlock/index.js
