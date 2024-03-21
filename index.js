@@ -131,7 +131,7 @@ function sleep(ms) {
   })
 }
 
-app.use(express.static("views"))
+app.use(express.static("./views"))
 app.use(express.json())
 
 app.get("^/$|/index(.html)?", function(req, res) {
