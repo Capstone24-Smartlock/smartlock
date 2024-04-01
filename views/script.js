@@ -130,6 +130,7 @@ async function setMotor(val) {
 const buttonSocket = new WebSocket(`${location.origin.replace("http://", "ws://").replace("https://", "wss://")}/button`)
 
 buttonSocket.addEventListener("message", async function(event) {
+    console.log(event.data)
     switch (event.data) {
         case "locked":
             Lock.locked = true
