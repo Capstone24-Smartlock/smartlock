@@ -141,8 +141,8 @@ buttonSocket.addEventListener("message", async function(event) {
     }
 })
 
-window.addEventListener("beforeunload", function() {
-    console.log("Before Unload")
+window.addEventListener("unload", function() {
+    console.log("Unload")
     buttonSocket.addEventListener("close", function() {})
     buttonSocket.close()
 })
