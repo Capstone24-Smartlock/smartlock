@@ -226,7 +226,6 @@ const buttonSocket = new WebSocket(app)
 
 Electronics.button.on("change", function(val) {
   if (val == 0 && !Lock.locked) {
-    console.log(ws.getWss())
     Lock.locked = true
     buttonSocket.send("locked")
     //ws.send("locked")
