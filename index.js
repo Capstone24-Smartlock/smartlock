@@ -169,6 +169,10 @@ function sleep(ms) {
   })
 }
 
+const srv = app.listen(8080, function() {
+  console.log("App Ready")
+})
+
 app.use(express.static(path.join(__dirname, "/views")))
 app.use(express.json())
 
@@ -221,7 +225,7 @@ app.get("/battery", async function(req, res) {
   res.send(JSON.stringify(await batteryData()))
 })
 
-const buttonSocket = new WebSocket(app)
+const buttonSocket = new WebSocket(srv)
 
 Electronics.button.on("change", function(val) {
   if (val == 0 && !Lock.locked) {
@@ -275,10 +279,6 @@ app.post("^/$|/index(.html)?", function(req, res) {
       Alarm.on = false
   }
   res.send("Success")
-})
-
-app.listen(8080, function() {
-  console.log("App Ready")
 })
 
 process.on("exit", function() {
