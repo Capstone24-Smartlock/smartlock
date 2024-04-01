@@ -8,27 +8,21 @@ const net = require("net")
 const express = require('express')
 const { Socket } = require("dgram")
 const app = express()
-const WebSocketServer = require("websocket").server
+const WebSocket = require("ws")
 
-class WebSocket {
+class WebSocketAPI {
   clients = []
 
-  constructor(server, autoAcceptConnections=true) {
-    this.socket = new WebSocketServer({
-      httpServer: server,
-      autoAcceptConnections: autoAcceptConnections,
-    })
+  constructor() {
+    this.socket = new WebSocket.Server({port: 8080})
 
     let clientList = this.clients
-    this.socket.on("request", function(req) {
-      let connection = req.accept("echo-protocol", req.origin)
-      console.log((new Date()) + " Connected")
-
-      connection.on("close", function() {
-        clientList.splice(clientList.indexOf(this))
+    this.socket.on("connection", function(ws) {
+      ws.on("close", function() {
+        clientList.splice(clientList.indexOf(ws))
       })
 
-      clientList.push(connection)
+      clientList.push(ws)
     })
   }
 
@@ -169,7 +163,7 @@ function sleep(ms) {
   })
 }
 
-const srv = app.listen(8080, function() {
+app.listen(8080, function() {
   console.log("App Ready")
 })
 
@@ -225,7 +219,7 @@ app.get("/battery", async function(req, res) {
   res.send(JSON.stringify(await batteryData()))
 })
 
-const buttonSocket = new WebSocket(srv)
+const buttonSocket = new WebSocketAPI()
 
 Electronics.button.on("change", function(val) {
   if (val == 0 && !Lock.locked) {
