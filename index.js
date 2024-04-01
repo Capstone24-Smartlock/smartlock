@@ -6,8 +6,39 @@ const fs = require("fs")
 const path = require("path")
 const net = require("net")
 const express = require('express')
+const { Socket } = require("dgram")
 const app = express()
-const ws = require("express-ws")(app)
+const WebSocketServer = require("websocket").server
+
+class WebSocket {
+  clients = []
+
+  constructor(server, autoAcceptConnections=false) {
+    this.socket = new WebSocketServer({
+      httpServer: server,
+      autoAcceptConnections: autoAcceptConnections,
+    })
+
+    let clientList = this.clients
+    this.socket.on("request", function(req) {
+      let connection = req.accept("echo-protocol", req.origin)
+      console.log((new Date()) + " Connected")
+
+      connection.on("close", function() {
+        clientList.splice(clientList.indexOf(this))
+      })
+
+      clientList.push(connection)
+      console.log(new Date() + " Connection Accepted")
+    })
+  }
+
+  send(message) {
+    this.clients.forEach(function(client) {
+      client.send(message)
+    })
+  }
+}
 
 class Electronics {
   static motor = new pwm.SoftPWM(5)
@@ -191,21 +222,40 @@ app.get("/battery", async function(req, res) {
   res.send(JSON.stringify(await batteryData()))
 })
 
-app.ws("/button", function(ws, req) {
-  Electronics.button.on("change", function(val) {
-    if (val == 0 && !Lock.locked) {
-      console.log(ws.getWss().clients)
-      Lock.locked = true
-      ws.send("locked")
-    } else if (val == 1 && Lock.locked && !Alarm.on) {
-      Alarm.tick()
-      if (Alarm.check()) {
-        Alarm.on = true
-        ws.send("alarm")
-      }
+const buttonSocket = new WebSocket(app)
+
+Electronics.button.on("change", function(val) {
+  if (val == 0 && !Lock.locked) {
+    console.log(ws.getWss())
+    Lock.locked = true
+    buttonSocket.send("locked")
+    //ws.send("locked")
+  } else if (val == 1 && Lock.locked && !Alarm.on) {
+    Alarm.tick()
+    if (Alarm.check()) {
+      Alarm.on = true
+      buttonSocket.send("alarm")
+      //ws.send("alarm")
     }
-  })
+  }
 })
+
+
+// app.ws("/button", function(ws, req) {
+// Electronics.button.on("change", function(val) {
+//   if (val == 0 && !Lock.locked) {
+//     console.log(ws.getWss())
+//     Lock.locked = true
+//     ws.send("locked")
+//   } else if (val == 1 && Lock.locked && !Alarm.on) {
+//     Alarm.tick()
+//     if (Alarm.check()) {
+//       Alarm.on = true
+//       ws.send("alarm")
+//     }
+//   }
+// })
+// })
 
 app.get("/events(.html)?", function(req, res) {
   res.send(Event.file)

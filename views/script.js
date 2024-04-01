@@ -127,7 +127,7 @@ async function setMotor(val) {
     })
 }
 
-const buttonSocket = new WebSocket(`${location.origin.replace("http://", "ws://").replace("https://", "wss://")}/button`)
+const buttonSocket = new WebSocket(`${location.origin.replace("http://", "ws://").replace("https://", "wss://")}/`)
 
 //RLcPGd2FPwF0rfgLjDCFm76f3eQ=
 //LAhLUNdN0TZHvNsFVzIUOA==
