@@ -224,34 +224,15 @@ const buttonSocket = new WebSocketAPI()
 Electronics.button.on("change", function(val) {
   if (val == 0 && !Lock.locked) {
     Lock.locked = true
-    buttonSocket.send("locked")
-    //ws.send("locked")
+    buttonSocket.send("lock")
   } else if (val == 1 && Lock.locked && !Alarm.on) {
     Alarm.tick()
     if (Alarm.check()) {
       Alarm.on = true
       buttonSocket.send("alarm")
-      //ws.send("alarm")
     }
   }
 })
-
-
-// app.ws("/button", function(ws, req) {
-// Electronics.button.on("change", function(val) {
-//   if (val == 0 && !Lock.locked) {
-//     console.log(ws.getWss())
-//     Lock.locked = true
-//     ws.send("locked")
-//   } else if (val == 1 && Lock.locked && !Alarm.on) {
-//     Alarm.tick()
-//     if (Alarm.check()) {
-//       Alarm.on = true
-//       ws.send("alarm")
-//     }
-//   }
-// })
-// })
 
 app.get("/events(.html)?", function(req, res) {
   res.send(Event.file)
