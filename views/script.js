@@ -135,7 +135,7 @@ buttonSocket.addEventListener("message", async function(event) {
         case "locked":
             Lock.locked = true
             break
-        case "unlocked":
+        case "unlock":
             Lock.locked = false
             break
         case "alarm":
