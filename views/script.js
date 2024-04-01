@@ -139,6 +139,7 @@ buttonSocket.addEventListener("message", async function(event) {
             Alarm.on = true
             break
     }
+    buttonSocket.send("Success")
 })
 
 buttonSocket.addEventListener("open", function() {
