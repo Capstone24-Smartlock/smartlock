@@ -141,6 +141,14 @@ buttonSocket.addEventListener("message", async function(event) {
     }
 })
 
+buttonSocket.addEventListener("open", function() {
+    console.log("Web Socket successfully opened")
+})
+
+buttonSocket.addEventListener("error", function(error) {
+    console.log(error)
+})
+
 window.addEventListener("unload", function() {
     console.log("Unload")
     buttonSocket.addEventListener("close", function() {})
