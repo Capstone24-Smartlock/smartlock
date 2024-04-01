@@ -29,7 +29,6 @@ class WebSocket {
       })
 
       clientList.push(connection)
-      console.log(new Date() + " Connection Accepted")
     })
   }
 
