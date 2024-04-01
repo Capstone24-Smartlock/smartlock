@@ -194,6 +194,7 @@ app.get("/battery", async function(req, res) {
 app.ws("/button", function(ws, req) {
   Electronics.button.on("change", function(val) {
     if (val == 0 && !Lock.locked) {
+      console.log(ws.getWss().clients)
       Lock.locked = true
       ws.send("locked")
     } else if (val == 1 && Lock.locked && !Alarm.on) {

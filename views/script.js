@@ -129,6 +129,8 @@ async function setMotor(val) {
 
 const buttonSocket = new WebSocket(`${location.origin.replace("http://", "ws://").replace("https://", "wss://")}/button`)
 
+//RLcPGd2FPwF0rfgLjDCFm76f3eQ=
+//LAhLUNdN0TZHvNsFVzIUOA==
 buttonSocket.addEventListener("message", async function(event) {
     console.log(event.data)
     switch (event.data) {
