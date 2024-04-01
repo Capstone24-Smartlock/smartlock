@@ -141,6 +141,11 @@ buttonSocket.addEventListener("message", async function(event) {
     }
 })
 
+window.addEventListener("beforeunload", function() {
+    buttonSocket.addEventListener("close", function() {})
+    buttonSocket.close()
+})
+
 burger.addEventListener("click", function() {
     sidepanel.style.width = "250px"
     coverpanel.style.width = "100%"
