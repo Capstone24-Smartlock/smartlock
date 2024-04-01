@@ -265,12 +265,15 @@ app.post("^/$|/index(.html)?", function(req, res) {
       break
     case "unlock":
       Lock.locked = false
+      buttonSocket.send("unlock")
       break
     case "test":
       Electronics.motor.write(data.value)
       break
     case "alarm stopped":
       Alarm.on = false
+      buttonSocket.send("alarm stopped")
+      break
   }
   res.send("Success")
 })
