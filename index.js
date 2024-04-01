@@ -13,7 +13,7 @@ const WebSocketServer = require("websocket").server
 class WebSocket {
   clients = []
 
-  constructor(server, autoAcceptConnections=false) {
+  constructor(server, autoAcceptConnections=true) {
     this.socket = new WebSocketServer({
       httpServer: server,
       autoAcceptConnections: autoAcceptConnections,
