@@ -14,7 +14,7 @@ class WebSocketAPI {
   clients = []
 
   constructor() {
-    this.socket = new WebSocket.Server({port: 8080})
+    this.socket = new WebSocket.Server({port: 7000})
 
     let clientList = this.clients
     this.socket.on("connection", function(ws) {
