@@ -5,10 +5,11 @@ const gpio = require("raspi-gpio")
 const fs = require("fs")
 const path = require("path")
 const net = require("net")
-const express = require('express')
+const express = require("express")
 const { Socket } = require("dgram")
 const app = express()
 const WebSocket = require("ws")
+const PiCamera = require("pi-camera")
 
 class WebSocketAPI {
   clients = []
