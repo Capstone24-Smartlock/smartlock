@@ -10,7 +10,7 @@ const { Socket } = require("dgram")
 const app = express()
 const WebSocket = require("ws")
 const PiCamera = require("pi-camera")
-
+//edit
 const camera = new net.Socket()
 
 camera.connect(9876, "127.0.0.1", function() {
