@@ -11,7 +11,7 @@ const app = express()
 const WebSocket = require("ws")
 const PiCamera = require("pi-camera")
 
-const camera = new net.socket()
+const camera = new net.Socket()
 
 camera.connect(8888, "127.0.0.1", function() {
   camera.write("get")
