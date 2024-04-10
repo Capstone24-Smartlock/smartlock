@@ -13,7 +13,7 @@ const PiCamera = require("pi-camera")
 
 const camera = new net.Socket()
 
-camera.connect(8888, "127.0.0.1", function() {
+camera.connect(9876, "127.0.0.1", function() {
   camera.write("get")
 })
 
