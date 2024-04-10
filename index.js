@@ -110,6 +110,7 @@ class Camera {
     images = JSON.stringify(images)
 
     fs.writeFileSync(path.join(__dirname, `images.json`), images)
+    console.log("Done")
   }
 }
 
