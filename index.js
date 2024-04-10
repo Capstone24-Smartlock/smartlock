@@ -11,6 +11,16 @@ const app = express()
 const WebSocket = require("ws")
 const PiCamera = require("pi-camera")
 
+const camera = new net.socket()
+
+camera.connect(8888, "127.0.0.1", function() {
+  camera.write("get")
+})
+
+camera.on("data", function(data) {
+  console.log(data.toString())
+})
+
 class WebSocketAPI {
   clients = []
 
@@ -158,6 +168,38 @@ class Event {
   }
 }
 
+class Battery {
+  static async properties(req) {
+    const battery = new net.Socket()
+    battery.connect(8423, "127.0.0.1", function() {
+      battery.write(req)
+    })
+    return await new Promise(function(resolve, reject) {
+      battery.on("data", function(data) {
+        text = data.toString()
+        if (text.split("").slice(0,-1).join("").valueOf() === "Invalid request.".valueOf()) {
+          reject()
+        }
+        resolve(text)
+      })
+    }).then(function(data) {
+      return data.split(" ")[1].split("").slice(0, -1).join("")
+    }).catch(function() {
+      return null
+    })
+  }
+
+  static async data() {
+    if (await Battery.properties("get battery") === null) {
+      return null
+    }
+    return {
+      level: parseFloat(await Battery.properties("get battery"))/100,
+      isCharging: (await Battery.properties("get battery_power_plugged")).valueOf() === "true".valueOf(),
+    }
+  }
+}
+
 function sleep(ms) {
   return new Promise((resolve) => {
     setTimeout(resolve, ms)
@@ -186,38 +228,8 @@ app.get("/log(.html)?", function(req, res) {
   res.sendFile(path.join(__dirname, "/views/log/log.html"))
 })
 
-async function batteryProperties(req) {
-  const battery = new net.Socket()
-  battery.connect(8423, "127.0.0.1", function() {
-    battery.write(req)
-  })
-  return await new Promise(function(resolve, reject) {
-    battery.on("data", function(data) {
-      text = data.toString()
-      if (text.split("").slice(0,-1).join("").valueOf() === "Invalid request.".valueOf()) {
-        reject()
-      }
-      resolve(text)
-    })
-  }).then(function(data) {
-    return data.split(" ")[1].split("").slice(0, -1).join("")
-  }).catch(function() {
-    return null
-  })
-}
-
-async function batteryData() {
-  if (await batteryProperties("get battery") === null) {
-    return null
-  }
-  return {
-    level: parseFloat(await batteryProperties("get battery"))/100,
-    isCharging: (await batteryProperties("get battery_power_plugged")).valueOf() === "true".valueOf(),
-  }
-}
-
 app.get("/battery", async function(req, res) {
-  res.send(JSON.stringify(await batteryData()))
+  res.send(JSON.stringify(await Battery.data()))
 })
 
 const buttonSocket = new WebSocketAPI()
