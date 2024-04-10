@@ -9,7 +9,7 @@ const express = require("express")
 const { Socket } = require("dgram")
 const app = express()
 const WebSocket = require("ws")
-const PiCamera = require("pi-camera")
+const StillCamera = require("pi-camera-connect").StillCamera
 
 class WebSocketAPI {
   clients = []
@@ -78,16 +78,8 @@ class Lock {
 
 class Camera {
   static async snap() {
-    const camera = new PiCamera({
-      mode: "photo",
-      width: 480,
-      height: 640,
-      nopreview: true,
-    })
-
-    let img = await camera.snapDataUrl().then(function(result) {
-      return result
-    })
+    const camera = new StillCamera()
+    const img = await camera.takeImage()
 
     console.log(img)
   }
