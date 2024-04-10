@@ -10,16 +10,6 @@ const { Socket } = require("dgram")
 const app = express()
 const WebSocket = require("ws")
 const PiCamera = require("pi-camera")
-//edit
-const camera = new net.Socket()
-
-camera.connect(9876, "127.0.0.1", function() {
-  camera.write("get")
-})
-
-camera.on("data", function(data) {
-  console.log("Connected")
-})
 
 class WebSocketAPI {
   clients = []
@@ -86,6 +76,25 @@ class Lock {
   }
 }
 
+class Camera {
+  static async snap() {
+    const camera = new PiCamera({
+      mode: "photo",
+      width: 480,
+      height: 640,
+      nopreview: true,
+    })
+
+    let img = await camera.snapDataUrl().then(function(result) {
+      return result
+    })
+
+    console.log(img)
+  }
+}
+
+Camera.snap()
+
 class Alarm {
   static timer = 0
   static timerList = [0]
@@ -109,6 +118,7 @@ class Alarm {
         Electronics.beeper.write(0)
         await sleep(100)
       }, 1100)
+
     } else if (!val && Alarm.#on) {
       Event.log(3)
       Alarm.timer = 0
