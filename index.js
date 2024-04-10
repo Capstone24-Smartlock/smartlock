@@ -88,6 +88,9 @@ class Camera {
       }
     })
 
+    let images = fs.readFileSync(path.join(__dirname, "images.json"))
+    images = JSON.parse(images)
+
     let img = fs.readFileSync("tmp.png")
     img = img.toString("base64")
     img = `data:image/png;base64,${img}`
@@ -103,9 +106,10 @@ class Camera {
       time: date.toLocaleTimeString("en-US"),
     }
 
-    data = JSON.toString(data)
+    images = [data, ...images]
+    images = JSON.stringify(images)
 
-    fs.writeFileSync(path.join(__dirname, `/photos/${date.getTime()}.json`), data)
+    fs.writeFileSync(path.join(__dirname, `images.json`), images)
   }
 }
 
