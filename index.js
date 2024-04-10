@@ -18,7 +18,7 @@ camera.connect(9876, "127.0.0.1", function() {
 })
 
 camera.on("data", function(data) {
-  console.log(data.toString())
+  console.log("Connected")
 })
 
 class WebSocketAPI {
