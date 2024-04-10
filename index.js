@@ -75,7 +75,7 @@ class Lock {
     Lock.#locked = val
   }
 }
-//Stupid
+
 class Camera {
   static async snap() {
     const date = new Date()
@@ -89,6 +89,8 @@ class Camera {
     }).then(function(result) {
       return result
     })
+
+    console.log(img)
   }
 }
 
