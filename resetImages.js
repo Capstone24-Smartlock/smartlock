@@ -1,3 +1,3 @@
 const fs = require("fs")
 
-fs.writeFileSync("./log.json", '[]')
+fs.writeFileSync("./images.json", '[]')
