@@ -80,17 +80,32 @@ class Camera {
   static async snap() {
     const date = new Date()
 
-    let img = await libcamera.still({
+    await libcamera.still({
       config: {
-        output: path.join(__dirname, "test.png"),
+        output: path.join(__dirname, "tmp.png"),
         width: 480,
         height: 640,
       }
-    }).then(function(result) {
-      return result
     })
 
-    console.log(img)
+    let img = fs.readFileSync("tmp.png")
+    img = img.toString("base64")
+    img = `data:image/png;base64,${img}`
+    
+    let data = {
+      image: img,
+      date: date.toLocaleDateString(undefined, {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      }),
+      time: date.toLocaleTimeString("en-US"),
+    }
+
+    data = JSON.toString(data)
+
+    fs.writeFileSync(path.join(__dirname, `/photos/${date.getTime()}.json`), data)
   }
 }
 
