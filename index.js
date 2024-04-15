@@ -207,7 +207,7 @@ class Battery {
     })
     return await new Promise(function(resolve, reject) {
       battery.on("data", function(data) {
-        text = data.toString()
+        let text = data.toString()
         if (text.split("").slice(0,-1).join("").valueOf() === "Invalid request.".valueOf()) {
           reject()
         }
