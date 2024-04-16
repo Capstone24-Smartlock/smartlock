@@ -1,5 +1,5 @@
 //Battery HTTP port: 8421
-//const raspi = require("raspi")
+//Imports all the required packages for this project.
 const pwm = require("raspi-soft-pwm")
 const gpio = require("raspi-gpio")
 const fs = require("fs")
@@ -11,6 +11,7 @@ const app = express()
 const WebSocket = require("ws")
 const libcamera = require("libcamera").libcamera
 
+//This creates the class that allows the server code to communicate with the front end through a WebSocket, allowing for real-time updates to occur on the front end. For example, when the lock is closed, the lock button will update to show a locked lock, or when the alarm is triggered, the “stop alarm” button will appear.
 class WebSocketAPI {
   clients = []
 
@@ -19,14 +20,17 @@ class WebSocketAPI {
 
     let clientList = this.clients
     this.socket.on("connection", function(ws) {
+      //Removes all closed clients from the client list
       ws.on("close", function() {
         clientList.splice(clientList.indexOf(ws))
       })
 
+      //Adds newly connected clients to the client list
       clientList.push(ws)
     })
   }
 
+  //Sends a message to all open clients connected to the WebSocket.
   send(message) {
     this.clients.forEach(function(client) {
       client.send(message)
@@ -34,6 +38,7 @@ class WebSocketAPI {
   }
 }
 
+//This class defines all the basic electronic compontents so they are easier to control and manage.
 class Electronics {
   static motor = new pwm.SoftPWM(5)
   static beeper = new gpio.DigitalOutput(1)
@@ -42,6 +47,7 @@ class Electronics {
     pullResistor: gpio.PULL_UP,
   })
 
+  //This method defines the 2 quick beeps the beepers does when the lock is unlocked.
   static async beep() {
     for (let i = 0; i < 2; i++) {
       Electronics.beeper.write(1)
@@ -52,10 +58,13 @@ class Electronics {
   }
 }
 
+//Makes sure the beeper is off when the program starts.
 Electronics.beeper.write(0)
 
+//This class defines all the methods and attrivutes used to control the locking and unlocking mechanisms of the lock.
 class Lock {
   static #locked = true
+  //Defines the PWM duty cycles the servo is calibrated in order to move to the correct position when opening and closing.
   static #opened = 0.03
   static #closed = 0.07
 
@@ -76,7 +85,9 @@ class Lock {
   }
 }
 
+//Camera class to easily manage the Camera.
 class Camera {
+  //Takes a picture and stores it in a JSON file called images.json as a dataURL.
   static async snap() {
     const date = new Date()
 
@@ -114,8 +125,7 @@ class Camera {
   }
 }
 
-Camera.snap()
-
+//Class to manage how the alarm will function. If a certain number of button presses are detected within a certain time interval of each other, then the alarm will go off. This is used to check lock rattling.
 class Alarm {
   static timer = 0
   static timerList = [0]
@@ -150,7 +160,7 @@ class Alarm {
 
     Alarm.#on = val
   }
-
+  
   static tick() {
     Alarm.timerList.push(Alarm.timer)
     Alarm.timer = 0
@@ -175,6 +185,7 @@ setInterval(function() {
   }
 }, 10)
 
+//Manages Event logging. Everytime an action is made with the lock, the event logger will store the data in a json file.
 class Event {
   static async log(event, date=new Date()) {
     let log = Event.file
@@ -199,6 +210,7 @@ class Event {
   }
 }
 
+//Manages the battery. Makes TCP requests to the PI Sugar API to get the power level and whether or not the battery is charging.
 class Battery {
   static async properties(req) {
     const battery = new net.Socket()
@@ -248,6 +260,7 @@ app.get("^/$|/index(.html)?", function(req, res) {
   res.sendFile(path.join(__dirname, "/views/index.html"))
 })
 
+//Sends current lock status on client reload.
 app.get("/data", function(req, res) {
   res.send(JSON.stringify({
     locked: Lock.locked,
@@ -263,8 +276,10 @@ app.get("/battery", async function(req, res) {
   res.send(JSON.stringify(await Battery.data()))
 })
 
+//Creates a WebSocketAPI that will send messages when certain button presses occur.
 const buttonSocket = new WebSocketAPI()
 
+//Event listener for buttons to lock the lock, activate the alarm, and send WebSocket requests.
 Electronics.button.on("change", function(val) {
   if (val == 0 && !Lock.locked) {
     Lock.locked = true
@@ -282,6 +297,7 @@ app.get("/events(.html)?", function(req, res) {
   res.send(Event.file)
 })
 
+//Takes incoming requests for the lock to do something and runs the necessary code to make that happen.
 app.post("^/$|/index(.html)?", function(req, res) {
   let data = req.body
   switch (data.req) {
@@ -303,6 +319,7 @@ app.post("^/$|/index(.html)?", function(req, res) {
   res.send("Success")
 })
 
+//Turns off beeper in case of program termination (currently unfunctional)
 process.on("exit", function() {
   Electronics.beeper.write(0)
 })

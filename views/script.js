@@ -5,6 +5,7 @@ const burger = document.getElementById("burger")
 const sidepanel = document.getElementById("sidepanel")
 const coverpanel = document.getElementById("coverpanel")
 
+//Lock class for client side. Sends unlock request to PI, keeps track of lock status, and updates UI based on status.
 class Lock {
     static #locked = true
 
@@ -38,6 +39,7 @@ Lock.button.addEventListener("click", async function() {
     Lock.locked = false
 })
 
+//Alarm managment for client side. Shows "Stop Alarm" button on UI and notifies PI when the alarm is stopped.
 class Alarm {
     static #on = false
 
@@ -71,6 +73,7 @@ Alarm.button.addEventListener("click", async function() {
     Alarm.on = false
 })
 
+//Manages battery on the client side. Keep the power level and whether it is charging up to data by making requests to the PI every 10 seconds.
 class Battery {
     static power = document.getElementById("power")
     static powertext = document.getElementById("powertext")
@@ -114,6 +117,7 @@ class Battery {
     }
 }
 
+//For testing purposes. Used to calibrate PWM signals of servo.
 async function setMotor(val) {
     await fetch("/", {
         method: "POST",
@@ -127,8 +131,10 @@ async function setMotor(val) {
     })
 }
 
+//Creates a WebSocket connection
 const buttonSocket = new WebSocket(`${location.origin.replace("http://", "ws://").replace("https://", "wss://").replace("8080", "7000")}/`)
 
+//Event listener for buttonSocket. When the socket recieves a message, it updates the page accordingly.
 buttonSocket.addEventListener("message", async function(event) {
     console.log(event.data)
     switch (event.data) {
@@ -148,6 +154,7 @@ buttonSocket.addEventListener("message", async function(event) {
     buttonSocket.send("Success")
 })
 
+//Graceful shutdown of WebSocket.
 window.addEventListener("unload", function() {
     console.log("Unload")
     buttonSocket.addEventListener("close", function() {})
@@ -166,6 +173,7 @@ coverpanel.addEventListener("click", function() {
     coverpanel.style.height = "0"
 })
 
+//Acquires lock status on page load
 async function getData() {
     let data = await fetch("/data").then(function(res) {
         return res.json()

@@ -1,3 +1,4 @@
+//Creates a display for all the events stored on the PI. Does not refresh in real-time, page refresh required.
 class LogEvent {
     static events = []
     static log
@@ -6,6 +7,7 @@ class LogEvent {
     static eventTable = document.getElementById("events")
     static loadButton = document.getElementById("load")
 
+    //Only loads 50 events at a time to prevent the page from being overloaded.
     static *updateGen() {
         console.log("Run")
         this.loadButton.style.visibility = "visible"
@@ -65,6 +67,7 @@ class LogEvent {
         }
     }
 
+    //Creates the event as a table row.
     createRow() {
         let row = document.createElement("tr")
         let items = [this.date, this.time, this.message]
@@ -77,7 +80,7 @@ class LogEvent {
         LogEvent.eventTable.appendChild(row)
     }
 }
-//asdasd
+
 window.addEventListener("load", async function() {
     LogEvent.log = await fetch("/events").then(function(res) {
         return res.json()
