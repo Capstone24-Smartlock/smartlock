@@ -10,8 +10,7 @@ const { Socket } = require("dgram")
 const app = express()
 const WebSocket = require("ws")
 const libcamera = require("libcamera").libcamera
-const sharp = require("sharp")
-const mysql = require("mysql")
+const mariadb = require("mariadb")
 
 //This creates the class that allows the server code to communicate with the front end through a WebSocket, allowing for real-time updates to occur on the front end. For example, when the lock is closed, the lock button will update to show a locked lock, or when the alarm is triggered, the “stop alarm” button will appear.
 class WebSocketAPI {
