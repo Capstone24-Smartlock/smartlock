@@ -10,7 +10,7 @@ const { Socket } = require("dgram")
 const app = express()
 const WebSocket = require("ws")
 const libcamera = require("libcamera").libcamera
-//const mariadb = require("mariadb")
+const mysql = require("mysql")
 
 //This creates the class that allows the server code to communicate with the front end through a WebSocket, allowing for real-time updates to occur on the front end. For example, when the lock is closed, the lock button will update to show a locked lock, or when the alarm is triggered, the “stop alarm” button will appear.
 class WebSocketAPI {
@@ -210,6 +210,20 @@ class Event {
     fs.writeFileSync(path.join(__dirname, "/log.json"), val)
   }
 }
+
+const connection = mysql.createConnection({
+  host: "localhost",
+  user: "dylan",
+  password: "capstone24",
+  database: "smartlock_log"
+})
+
+connection.connect()
+
+connection.query("select * from events", function(error, results, fields) {
+  if (error) {throw error}
+  console.log(results)
+})
 
 //Manages the battery. Makes TCP requests to the PI Sugar API to get the power level and whether or not the battery is charging.
 class Battery {
