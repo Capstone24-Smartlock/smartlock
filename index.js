@@ -181,16 +181,16 @@ class Event {
         return url
       })
     }
-    Event.connection.query(`INSERT INTO events (date, event${image === null ? "" : ", image"}) VALUES (${date.getTime()}, ${event}${image === null ? "" : `, ${image}`})`)
+    Event.connection.query(`INSERT INTO events (date, event${image === null ? "" : ", image"}) VALUES (${date.getTime()}, ${event}${image === null ? "" : `, "${image}"`})`)
   }
 }
 Event.connection.connect()
 
 Event.log(0, Camera.snap())
 
-// Event.connection.query("SELECT * FROM events", function(err, results) {
-//   console.log(results)
-// })
+Event.connection.query("SELECT * FROM events", function(err, results) {
+  console.log(results)
+})
 
 //Manages the battery. Makes TCP requests to the PI Sugar API to get the power level and whether or not the battery is charging.
 class Battery {
