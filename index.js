@@ -90,8 +90,6 @@ class Lock {
 class Camera {
   //Takes a picture and stores it in a JSON file called images.json as a dataURL.
   static async snap() {
-    const date = new Date()
-
     await libcamera.still({
       config: {
         output: path.join(__dirname, "tmp.png"),
@@ -100,29 +98,11 @@ class Camera {
       }
     })
 
-    let images = fs.readFileSync(path.join(__dirname, "images.json"))
-    images = JSON.parse(images)
-
-    let img = fs.readFileSync("tmp.png")
+    let img = fs.readFileSync(path.join(__dirname, "tmp.png"))
     img = img.toString("base64")
     img = `data:image/png;base64,${img}`
     
-    let data = {
-      image: img,
-      date: date.toLocaleDateString(undefined, {
-        weekday: "long",
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      }),
-      time: date.toLocaleTimeString("en-US"),
-    }
-
-    images = [data, ...images]
-    images = JSON.stringify(images)
-
-    fs.writeFileSync(path.join(__dirname, `images.json`), images)
-    console.log("Done")
+    return img
   }
 }
 
@@ -142,7 +122,7 @@ class Alarm {
 
   static set on(val) {
     if (val && !Alarm.#on) {
-      Event.log(2)
+      Event.log(2, Camera.snap())
 
       Alarm.#interval = setInterval(async function() {
         Electronics.beeper.write(1)
@@ -196,42 +176,16 @@ class Event {
   })
 
   static async log(event, image=null, date=new Date()) {
-    Event.connection.connect()
-
-    Event.connection.query(`INSERT INTO events (date, event${image === null ? "" : ", image"}) VALUES (${date.getTime()}, ${event}${image === null ? "" : `, ${image}`})`)
-
-    //Event.connection.end()
-    // let log = Event.file
-    // log = JSON.parse(log)
-    // log.date = [date.toLocaleDateString(undefined, {
-    //   weekday: "long",
-    //   year: "numeric",
-    //   month: "long",
-    //   day: "numeric",
-    // }), ...log.date]
-    // log.time = [date.toLocaleTimeString("en-US"), ...log.time]
-    // log.event = [event, ...log.event]
-    // Event.file = JSON.stringify(log)
-  }
-
-  static get file() {
-    return fs.readFileSync(path.join(__dirname, "/log.json")).toString()
-  }
-
-  static set file(val) {
-    fs.writeFileSync(path.join(__dirname, "/log.json"), val)
+    Event.connection.query(`INSERT INTO events (date, event${image === null ? "" : ", image"}) VALUES (${date.getTime()}, ${event}${image === null ? "" : `, ${await image}`})`)
   }
 }
+Event.connection.connect()
 
-Event.log(0)
+Event.log(0, Camera.snap())
 
-//Event.connection.connect()
-
-Event.connection.query("SELECT * FROM events", function(err, results) {
-  console.log(results)
-})
-
-//Event.connection.end()
+// Event.connection.query("SELECT * FROM events", function(err, results) {
+//   console.log(results)
+// })
 
 //Manages the battery. Makes TCP requests to the PI Sugar API to get the power level and whether or not the battery is charging.
 class Battery {
