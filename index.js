@@ -188,18 +188,30 @@ setInterval(function() {
 
 //Manages Event logging. Everytime an action is made with the lock, the event logger will store the data in a json file.
 class Event {
-  static async log(event, date=new Date()) {
-    let log = Event.file
-    log = JSON.parse(log)
-    log.date = [date.toLocaleDateString(undefined, {
-      weekday: "long",
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    }), ...log.date]
-    log.time = [date.toLocaleTimeString("en-US"), ...log.time]
-    log.event = [event, ...log.event]
-    Event.file = JSON.stringify(log)
+  static connection = mysql.createConnection({
+    host: "localhost",
+    user: "dylan",
+    password: "capstone24",
+    database: "smartlock_log"
+  })
+
+  static async log(event, image=null, date=new Date()) {
+    Event.connection.connect()
+
+    Event.connection.query(`INSERT INTO events (date, event${image === null ? "" : ", image"}) VALUES (${date.getTime()}, ${event}${image === null ? "" : `, ${image}`})`)
+
+    Event.connection.end()
+    // let log = Event.file
+    // log = JSON.parse(log)
+    // log.date = [date.toLocaleDateString(undefined, {
+    //   weekday: "long",
+    //   year: "numeric",
+    //   month: "long",
+    //   day: "numeric",
+    // }), ...log.date]
+    // log.time = [date.toLocaleTimeString("en-US"), ...log.time]
+    // log.event = [event, ...log.event]
+    // Event.file = JSON.stringify(log)
   }
 
   static get file() {
@@ -211,19 +223,15 @@ class Event {
   }
 }
 
-const connection = mysql.createConnection({
-  host: "localhost",
-  user: "dylan",
-  password: "capstone24",
-  database: "smartlock_log"
-})
+Event.log(0)
 
-connection.connect()
+Event.connection.connect()
 
-connection.query("select * from events", function(error, results, fields) {
-  if (error) {throw error}
+Event.connection.query("SELECT * FROM events", function(err, results) {
   console.log(results)
 })
+
+Event.connection.end()
 
 //Manages the battery. Makes TCP requests to the PI Sugar API to get the power level and whether or not the battery is charging.
 class Battery {
