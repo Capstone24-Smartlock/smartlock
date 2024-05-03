@@ -200,7 +200,7 @@ class Event {
 
     Event.connection.query(`INSERT INTO events (date, event${image === null ? "" : ", image"}) VALUES (${date.getTime()}, ${event}${image === null ? "" : `, ${image}`})`)
 
-    Event.connection.end()
+    //Event.connection.end()
     // let log = Event.file
     // log = JSON.parse(log)
     // log.date = [date.toLocaleDateString(undefined, {
@@ -225,13 +225,13 @@ class Event {
 
 Event.log(0)
 
-Event.connection.connect()
+//Event.connection.connect()
 
 Event.connection.query("SELECT * FROM events", function(err, results) {
   console.log(results)
 })
 
-Event.connection.end()
+//Event.connection.end()
 
 //Manages the battery. Makes TCP requests to the PI Sugar API to get the power level and whether or not the battery is charging.
 class Battery {
