@@ -176,12 +176,17 @@ class Event {
   })
 
   static async log(event, image=null, date=new Date()) {
+    if (image !== null) {
+      image = await image.then(function(url) {
+        return url
+      })
+    }
     Event.connection.query(`INSERT INTO events (date, event${image === null ? "" : ", image"}) VALUES (${date.getTime()}, ${event}${image === null ? "" : `, ${image}`})`)
   }
 }
 Event.connection.connect()
 
-Event.log(0, await Camera.snap())
+Event.log(0, Camera.snap())
 
 // Event.connection.query("SELECT * FROM events", function(err, results) {
 //   console.log(results)
