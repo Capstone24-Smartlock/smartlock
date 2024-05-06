@@ -186,8 +186,15 @@ class Event {
 }
 Event.connection.connect()
 
-Event.connection.query("SELECT MAX(id) AS max FROM events", function(err, results) {
-  console.log(results)
+function formatQuery(result) {
+  return result.map(function(e) {
+    return JSON.parse(JSON.stringify(e))
+  })
+}
+
+Event.connection.query("SELECT MAX(id) AS max FROM events", function(err, result) {
+  result = formatQuery(result)
+  console.log(result[0]["max"])
 })
 
 //Manages the battery. Makes TCP requests to the PI Sugar API to get the power level and whether or not the battery is charging.
