@@ -1,4 +1,15 @@
-//Resets the log.json file
-const fs = require("fs")
+const mysql = require("mysql")
 
-fs.writeFileSync("./log.json", '{"date":[],"time":[],"event":[]}')
+let connection = mysql.createConnection({
+    host: "localhost",
+    user: "dylan",
+    password: "capstone24",
+    database: "smartlock_log"
+})
+
+connection.connect()
+
+connection.query("DELETE FROM events")
+connection.query("ALTER TABLE events AUTO_INCREMENT = 0")
+
+connection.end()
