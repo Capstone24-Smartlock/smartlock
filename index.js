@@ -186,9 +186,7 @@ class Event {
 }
 Event.connection.connect()
 
-Event.log(0, Camera.snap())
-
-Event.connection.query("SELECT * FROM events", function(err, results) {
+Event.connection.query("SELECT MAX(id) FROM events", function(err, results) {
   console.log(results)
 })
 
@@ -276,7 +274,10 @@ Electronics.button.on("change", function(val) {
 })
 
 app.get("/events(.html)?", function(req, res) {
-  res.send(Event.file)
+  let data = req.body
+  Event.connection.query(`SELECT * FROM events WHERE id BETWEEN ${data.start} AND ${data.end}`, function(err, result) {
+    res.send(result)
+  })
 })
 
 //Takes incoming requests for the lock to do something and runs the necessary code to make that happen.

@@ -3,6 +3,7 @@ class LogEvent {
     static events = []
     static log
     static eventsPerLoad = 50
+    static max
 
     static eventTable = document.getElementById("events")
     static loadButton = document.getElementById("load")
@@ -82,6 +83,12 @@ class LogEvent {
 }
 
 window.addEventListener("load", async function() {
+    LogEvent.max = await fetch("/max").then(function(res) {
+        res.json()
+    }).then(function(data) {
+        return data
+    })
+
     LogEvent.log = await fetch("/events").then(function(res) {
         return res.json()
     }).then(function(data) {
