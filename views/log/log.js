@@ -17,7 +17,7 @@ class LogEvent {
         let current = 0
 
         let data = await fetch("/events", {
-            method: "GET",
+            method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },

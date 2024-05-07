@@ -261,7 +261,7 @@ app.get("/max", function(req, res) {
   })
 })
 
-app.get("/events(.html)?", function(req, res) {
+app.post("/events", function(req, res) {
   let data = req.body
   Event.connection.query(`SELECT * FROM events WHERE id BETWEEN ${data.start} AND ${data.end}`, function(err, result) {
     res.send(formatQuery(result))
