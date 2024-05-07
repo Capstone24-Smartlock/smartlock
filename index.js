@@ -257,7 +257,7 @@ app.get("/log(.html)?", function(req, res) {
 app.get("/max", function(req, res) {
   Event.connection.query("SELECT MAX(id) AS max FROM events", function(err, result) {
     result = formatQuery(result)
-    res.sendFile(result[0]["max"])
+    res.send(result[0]["max"])
   })
 })
 
