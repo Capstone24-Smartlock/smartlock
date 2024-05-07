@@ -89,6 +89,8 @@ window.addEventListener("load", async function() {
         return data
     })
 
+    console.log(max)
+
     LogEvent.log = await fetch("/events").then(function(res) {
         return res.json()
     }).then(function(data) {
