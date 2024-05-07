@@ -35,7 +35,7 @@ class LogEvent {
 
     static async run() {
         LogEvent.max = await fetch("/max").then(function(res) {
-            res.json()
+            return res.json()
         }).then(function(data) {
             console.log(data)
             return data
