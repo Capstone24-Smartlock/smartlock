@@ -19,12 +19,12 @@ class LogEvent {
         let data = await fetch("/events", {
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-type": "application/json",
             },
-            body: {
+            body: JSON.stringify({
                 start: current,
                 end: current + LogEvent.eventsPerLoad - 1,
-            }
+            })
         }).then(function(res) {
             return res.json()
         }).then(function(data) {
@@ -115,7 +115,7 @@ class LogEvent {
 
 LogEvent.run()
 
-LogEvent.loadButton(function() {
+LogEvent.loadButton.addEventListener(function() {
     LogEvent.update.next()
 })
 
