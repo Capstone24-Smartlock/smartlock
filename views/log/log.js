@@ -9,26 +9,47 @@ class LogEvent {
     static loadButton = document.getElementById("load")
 
     //Only loads 50 events at a time to prevent the page from being overloaded.
-    static *updateGen() {
-        console.log("Run")
-        this.loadButton.style.visibility = "visible"
-        for (let i = 0; i < Math.ceil(LogEvent.log.date.length/LogEvent.eventsPerLoad); i++) {
-            for (let event = 0; event < LogEvent.eventsPerLoad; event++) {
-                let index = i*LogEvent.eventsPerLoad + event
-                if (typeof LogEvent.log.date[index] !== "undefined") {
-                    let eve = new LogEvent(LogEvent.log.date[index], LogEvent.log.time[index], LogEvent.log.event[index])
-                    eve.createRow()
-                } else {
-                    break
-                }
-            }
-            if (i == Math.ceil(LogEvent.log.date.length/LogEvent.eventsPerLoad) - 1) {
-                break
-            }
-            yield
+    static async *updateGen() {
+        if (LogEvent.max > 50) {
+            LogEvent.loadButton.style.visibility = "visible"
         }
-        this.loadButton.style.visibility = "hidden"
-        return true
+
+        let current = 0
+
+        let data = await fetch("/events", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: {
+                start: current,
+                end: current + LogEvent.eventsPerLoad - 1,
+            }
+        }).then(function(res) {
+            return res.json()
+        }).then(function(data) {
+            return data
+        })
+        console.log(data)
+        yield
+        // this.loadButton.style.visibility = "visible"
+        // for (let i = 0; i < Math.ceil(LogEvent.log.date.length/LogEvent.eventsPerLoad); i++) {
+        //     for (let event = 0; event < LogEvent.eventsPerLoad; event++) {
+        //         let index = i*LogEvent.eventsPerLoad + event
+        //         if (typeof LogEvent.log.date[index] !== "undefined") {
+        //             let eve = new LogEvent(LogEvent.log.date[index], LogEvent.log.time[index], LogEvent.log.event[index])
+        //             eve.createRow()
+        //         } else {
+        //             break
+        //         }
+        //     }
+        //     if (i == Math.ceil(LogEvent.log.date.length/LogEvent.eventsPerLoad) - 1) {
+        //         break
+        //     }
+        //     yield
+        // }
+        // this.loadButton.style.visibility = "hidden"
+        // return true
     }
 
     static update = this.updateGen()
@@ -37,11 +58,10 @@ class LogEvent {
         LogEvent.max = await fetch("/max").then(function(res) {
             return res.json()
         }).then(function(data) {
-            console.log(data)
             return data
         })
-    
-        console.log(LogEvent.max)
+
+        LogEvent.update.next()
     }
 
     constructor(date, time, event) {
@@ -94,6 +114,10 @@ class LogEvent {
 }
 
 LogEvent.run()
+
+LogEvent.loadButton(function() {
+    LogEvent.update.next()
+})
 
 LogEvent.loadButton.addEventListener("click", function() {
     LogEvent.update.next()

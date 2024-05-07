@@ -261,6 +261,13 @@ app.get("/max", function(req, res) {
   })
 })
 
+app.get("/events(.html)?", function(req, res) {
+  let data = req.body
+  Event.connection.query(`SELECT * FROM events WHERE id BETWEEN ${data.start} AND ${data.end}`, function(err, result) {
+    res.send(formatQuery(result))
+  })
+})
+
 app.get("/battery", async function(req, res) {
   res.send(JSON.stringify(await Battery.data()))
 })
@@ -280,13 +287,6 @@ Electronics.button.on("change", function(val) {
       buttonSocket.send("alarm")
     }
   }
-})
-
-app.get("/events(.html)?", function(req, res) {
-  let data = req.body
-  Event.connection.query(`SELECT * FROM events WHERE id BETWEEN ${data.start} AND ${data.end}`, function(err, result) {
-    res.send(result)
-  })
 })
 
 //Takes incoming requests for the lock to do something and runs the necessary code to make that happen.
