@@ -115,7 +115,7 @@ class LogEvent {
 
 LogEvent.run()
 
-LogEvent.loadButton.addEventListener(function() {
+LogEvent.loadButton.addEventListener("click", function() {
     LogEvent.update.next()
 })
 
