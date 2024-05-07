@@ -82,24 +82,15 @@ class LogEvent {
     }
 }
 
-window.addEventListener("load", async function() {
-    LogEvent.max = await fetch("/max").then(function(res) {
-        res.json()
-    }).then(function(data) {
-        console.log(data)
-        return data
-    })
-
-    console.log(LogEvent.max)
-
-    LogEvent.log = await fetch("/events").then(function(res) {
-        return res.json()
-    }).then(function(data) {
-        return data
-    })
-
-    LogEvent.update.next()
+LogEvent.max = await fetch("/max").then(function(res) {
+    res.json()
+}).then(function(data) {
+    console.log(data)
+    return data
 })
+
+console.log(LogEvent.max)
+
 
 LogEvent.loadButton.addEventListener("click", function() {
     LogEvent.update.next()
