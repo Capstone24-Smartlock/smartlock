@@ -33,6 +33,17 @@ class LogEvent {
 
     static update = this.updateGen()
 
+    static async run() {
+        LogEvent.max = await fetch("/max").then(function(res) {
+            res.json()
+        }).then(function(data) {
+            console.log(data)
+            return data
+        })
+    
+        console.log(LogEvent.max)
+    }
+
     constructor(date, time, event) {
         this.date = date
         this.time = time
@@ -82,15 +93,7 @@ class LogEvent {
     }
 }
 
-LogEvent.max = await fetch("/max").then(function(res) {
-    res.json()
-}).then(function(data) {
-    console.log(data)
-    return data
-})
-
-console.log(LogEvent.max)
-
+LogEvent.run()
 
 LogEvent.loadButton.addEventListener("click", function() {
     LogEvent.update.next()
