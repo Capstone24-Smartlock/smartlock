@@ -74,7 +74,7 @@ class LogEvent {
         })
         this.time = eventDate.toLocaleTimeString("en-US")
         this.event = event
-        this.image = (new TextDecoder()).decode(Uint8Array.from(image.data))
+        this.image = image !== null ? (new TextDecoder()).decode(Uint8Array.from(image.data)) : null
 
         if (this.image !== null) {
             console.log(this.image)
