@@ -127,7 +127,7 @@ class LogEvent {
 
         if (this.image !== null) {
             let img = document.createElement("img")
-            img.style.width = "50%"
+            img.style.width = "100%"
             img.setAttribute("src", this.image)
             LogEvent.eventTable.appendChild(img)
         }
