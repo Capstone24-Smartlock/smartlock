@@ -136,7 +136,6 @@ const buttonSocket = new WebSocket(`${location.origin.replace("http://", "ws://"
 
 //Event listener for buttonSocket. When the socket recieves a message, it updates the page accordingly.
 buttonSocket.addEventListener("message", async function(event) {
-    console.log(event.data)
     switch (event.data) {
         case "lock":
             Lock.locked = true
@@ -156,7 +155,6 @@ buttonSocket.addEventListener("message", async function(event) {
 
 //Graceful shutdown of WebSocket.
 window.addEventListener("unload", function() {
-    console.log("Unload")
     buttonSocket.addEventListener("close", function() {})
     buttonSocket.close()
 })
@@ -186,7 +184,6 @@ async function getData() {
 }
 
 window.addEventListener("load", function() {
-    console.log("load")
     getData()
     Battery.update()
 })
