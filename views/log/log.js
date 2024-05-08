@@ -40,6 +40,7 @@ class LogEvent {
             
             events.forEach(function(e) {
                 let event = new LogEvent(e.date, e.event, e.image)
+                LogEvent.events.push(event)
                 event.createRow()
             })
 
@@ -78,6 +79,7 @@ class LogEvent {
         if (this.image !== null) {
             console.log(this.image)
             console.log(this.image.toString())
+            console.log(this.image.toString()[0])
         }
 
         LogEvent.events.push(this)
