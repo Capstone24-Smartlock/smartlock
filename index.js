@@ -102,6 +102,7 @@ class Camera {
     img = img.toString("base64")
     img = `data:image/png;base64,${img}`
     
+    console.log("Picture Taken")
     return img
   }
 }
