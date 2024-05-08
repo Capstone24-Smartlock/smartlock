@@ -35,6 +35,8 @@ class LogEvent {
             }).then(function(data) {
                 return data
             })
+
+            console.log(events)
             
             events.forEach(function(e) {
                 let event = new LogEvent(e.date, e.event, e.image)
