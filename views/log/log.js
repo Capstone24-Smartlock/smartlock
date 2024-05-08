@@ -75,6 +75,11 @@ class LogEvent {
         this.event = event
         this.image = image
 
+        if (this.image !== null) {
+            console.log(this.image)
+            console.log(this.image.toString())
+        }
+
         LogEvent.events.push(this)
     }
 
