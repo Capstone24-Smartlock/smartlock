@@ -115,7 +115,15 @@ class LogEvent {
             elem.innerHTML = items[i]
             row.appendChild(elem)
         }
+
         LogEvent.eventTable.appendChild(row)
+
+        if (this.image !== null) {
+            let img = document.createElement("img")
+            img.style.width = "50%"
+            img.setAttribute("src", this.image.toString())
+            LogEvent.eventTable.appendChild(img)
+        }
     }
 }
 
