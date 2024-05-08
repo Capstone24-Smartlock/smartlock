@@ -63,9 +63,8 @@ class LogEvent {
     constructor(date, event, image=null) {
         let eventDate = new Date()
         eventDate.setTime(date)
-        
+
         this.date = eventDate.toLocaleDateString("en-US", {
-            weekday: null,
             year: "numeric",
             month: "long",
             day: "numeric",
