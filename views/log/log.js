@@ -74,7 +74,7 @@ class LogEvent {
         })
         this.time = eventDate.toLocaleTimeString("en-US")
         this.event = event
-        this.image = image
+        this.image = (new TextDecoder()).decode(Uint8Array.from(image.data))
 
         if (this.image !== null) {
             console.log(this.image)
@@ -128,7 +128,7 @@ class LogEvent {
         if (this.image !== null) {
             let img = document.createElement("img")
             img.style.width = "50%"
-            img.setAttribute("src", this.image.toString())
+            img.setAttribute("src", this.image)
             LogEvent.eventTable.appendChild(img)
         }
     }
