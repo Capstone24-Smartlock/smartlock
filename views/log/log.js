@@ -133,7 +133,3 @@ LogEvent.run()
 LogEvent.loadButton.addEventListener("click", function() {
     LogEvent.update.next()
 })
-
-LogEvent.loadButton.addEventListener("click", function() {
-    LogEvent.update.next()
-})
