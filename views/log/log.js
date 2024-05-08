@@ -13,43 +13,39 @@ class LogEvent {
         if (LogEvent.max > 50) {
             LogEvent.loadButton.style.visibility = "visible"
         }
+        
+        let current = LogEvent.max
 
-        let current = 0
+        while (current >= 0) {
+            if (current != LogEvent.max) {
+                yield
+            }
 
-        let data = await fetch("/events", {
-            method: "POST",
-            headers: {
-                "Content-type": "application/json",
-            },
-            body: JSON.stringify({
-                start: current,
-                end: current + LogEvent.eventsPerLoad - 1,
+            let events = await fetch("/events", {
+                method: "POST",
+                headers: {
+                    "Content-type": "application/json",
+                },
+                body: JSON.stringify({
+                    start: current - LogEvent.eventsPerLoad + 1,
+                    end: current,
+                })
+            }).then(function(res) {
+                return res.json()
+            }).then(function(data) {
+                return data
             })
-        }).then(function(res) {
-            return res.json()
-        }).then(function(data) {
-            return data
-        })
-        console.log(data)
-        yield
-        // this.loadButton.style.visibility = "visible"
-        // for (let i = 0; i < Math.ceil(LogEvent.log.date.length/LogEvent.eventsPerLoad); i++) {
-        //     for (let event = 0; event < LogEvent.eventsPerLoad; event++) {
-        //         let index = i*LogEvent.eventsPerLoad + event
-        //         if (typeof LogEvent.log.date[index] !== "undefined") {
-        //             let eve = new LogEvent(LogEvent.log.date[index], LogEvent.log.time[index], LogEvent.log.event[index])
-        //             eve.createRow()
-        //         } else {
-        //             break
-        //         }
-        //     }
-        //     if (i == Math.ceil(LogEvent.log.date.length/LogEvent.eventsPerLoad) - 1) {
-        //         break
-        //     }
-        //     yield
-        // }
-        // this.loadButton.style.visibility = "hidden"
-        // return true
+            
+            events.forEach(function(e) {
+                let event = new LogEvent(e.date, e.event, e.image)
+                event.createRow()
+            })
+
+            current -= LogEvent.eventsPerLoad
+        }
+
+        this.loadButton.style.visibility = "hidden"
+        return true
     }
 
     static update = this.updateGen()
@@ -64,10 +60,17 @@ class LogEvent {
         LogEvent.update.next()
     }
 
-    constructor(date, time, event) {
-        this.date = date
-        this.time = time
+    constructor(date, event, image=null) {
+        date = (new Date()).setTime(date)
+        this.date = date.toLocaleDateString("en-US", {
+            weekday: null,
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+        })
+        this.time = date.toLocaleTimeString("en-US")
         this.event = event
+        this.image = image
 
         LogEvent.events.push(this)
     }
