@@ -1,22 +1,16 @@
-const fs = require("fs")
+const mysql = require("mysql")
 
-class Event {
-    static async log(event, date=new Date()) {
-        let log = fs.readFileSync("./log.json").toString()
-        log = JSON.parse(log)
-        log.date = [date.toLocaleDateString(undefined, {
-        weekday: "long",
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-        }), ...log.date]
-        log.time = [date.toLocaleTimeString("en-US"), ...log.time]
-        log.event = [event, ...log.event]
-        fs.writeFileSync("./log.json", JSON.stringify(log))
-    }
+let connection = mysql.createConnection({
+    host: "localhost",
+    user: "dylan",
+    password: "capstone24",
+    database: "smartlock_log"
+})
+
+connection.connect()
+
+for (let i = 0; i < 500; i++) {
+    connection.query("INSERT INTO events (date, event) values (0, 0)")
 }
 
-for (let i = 0; i<100; i++) {
-    Event.log(0)
-}
-
+connection.end()

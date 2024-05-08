@@ -76,12 +76,6 @@ class LogEvent {
         this.event = event
         this.image = image !== null ? (new TextDecoder()).decode(Uint8Array.from(image.data)) : null
 
-        if (this.image !== null) {
-            console.log(this.image)
-            console.log(this.image.toString())
-            console.log(this.image.toString()[0])
-        }
-
         LogEvent.events.push(this)
     }
 
