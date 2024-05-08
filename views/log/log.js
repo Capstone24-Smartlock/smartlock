@@ -61,14 +61,16 @@ class LogEvent {
     }
 
     constructor(date, event, image=null) {
-        date = (new Date()).setTime(date)
-        this.date = date.toLocaleDateString("en-US", {
+        let eventDate = new Date()
+        eventDate.setTime(date)
+        
+        this.date = eventDate.toLocaleDateString("en-US", {
             weekday: null,
             year: "numeric",
             month: "long",
             day: "numeric",
         })
-        this.time = date.toLocaleTimeString("en-US")
+        this.time = eventDate.toLocaleTimeString("en-US")
         this.event = event
         this.image = image
 
