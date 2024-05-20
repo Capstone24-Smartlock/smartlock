@@ -5,6 +5,9 @@ const burger = document.getElementById("burger")
 const sidepanel = document.getElementById("sidepanel")
 const coverpanel = document.getElementById("coverpanel")
 
+let playAudio = true
+let audio = new Audio("./screw_you.mp3")
+
 //Lock class for client side. Sends unlock request to PI, keeps track of lock status, and updates UI based on status.
 class Lock {
     static #locked = true
@@ -20,6 +23,9 @@ class Lock {
         if (val && !this.#locked) {
             this.shaft.querySelectorAll("animateMotion")[1].beginElement()
         } else if (!val && this.#locked) {
+            if (playAudio) {
+                audio.play()
+            }
             this.shaft.querySelectorAll("animateMotion")[0].beginElement()
             fetch("/", {
                 method: "POST",
