@@ -57,6 +57,7 @@ class Alarm {
 
     static set on(val) {
         if (val && !this.#on) {
+            audio.play()
             this.button.style.visibility = "visible"
         } else if (!val && this.#on) {
             fetch("/", {
