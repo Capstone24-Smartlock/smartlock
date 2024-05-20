@@ -75,6 +75,12 @@ class Alarm {
     }
 }
 
+audio.addEventListener("ended", function() {
+    if (Alarm.on && playAudio) {
+        audio.play()
+    }
+})
+
 Alarm.button.addEventListener("click", async function() {
     Alarm.on = false
 })
