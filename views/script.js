@@ -20,12 +20,12 @@ class Lock {
     }
 
     static set locked(val) {
+        if (playAudio) {
+            audio.play()
+        }
         if (val && !this.#locked) {
             this.shaft.querySelectorAll("animateMotion")[1].beginElement()
         } else if (!val && this.#locked) {
-            if (playAudio) {
-                audio.play()
-            }
             this.shaft.querySelectorAll("animateMotion")[0].beginElement()
             fetch("/", {
                 method: "POST",
