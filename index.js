@@ -65,8 +65,8 @@ Electronics.beeper.writeSync(0)
 class Lock {
   static #locked = true
   //Defines the PWM duty cycles the servo is calibrated in order to move to the correct position when opening and closing.
-  static #opened = 0.06
-  static #closed = 0.08
+  static #opened = 0.05
+  static #closed = 0.065
 
   static get locked() {
     return Lock.#locked
