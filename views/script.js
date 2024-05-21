@@ -202,6 +202,10 @@ async function activateAlarm() {
     await fetch("/activateAlarm")
 }
 
+async function lockLock() {
+    await fetch("/lock")
+}
+
 window.addEventListener("load", function() {
     getData()
     Battery.update()

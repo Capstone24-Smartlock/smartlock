@@ -259,6 +259,11 @@ app.get("/activateAlarm", function(req, res) {
   res.send("Success")
 })
 
+app.get("lock", function(req, res) {
+  Lock.locked = true
+  res.send("Success")
+})
+
 app.get("/log(.html)?", function(req, res) {
   res.sendFile(path.join(__dirname, "/views/log/log.html"))
 })
