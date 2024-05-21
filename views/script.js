@@ -5,7 +5,7 @@ const burger = document.getElementById("burger")
 const sidepanel = document.getElementById("sidepanel")
 const coverpanel = document.getElementById("coverpanel")
 
-let playAudio = true
+let playAudio = false
 let audio = new Audio("./screw_you.mp3")
 
 //Lock class for client side. Sends unlock request to PI, keeps track of lock status, and updates UI based on status.
