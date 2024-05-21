@@ -44,8 +44,8 @@ class WebSocketAPI {
 //This class defines all the basic electronic compontents so they are easier to control and manage.
 class Electronics {
   static motor = new pwm.SoftPWM(5)
-  static beeper = new Gpio(1, "out") //1, 574
-  static button = new Gpio(26, "in", "both") //26, 538
+  static beeper = new Gpio(572, "out") //1, 574
+  static button = new Gpio(538, "in", "both") //26, 538
 
   //This method defines the 2 quick beeps the beepers does when the lock is unlocked.
   static async beep() {
