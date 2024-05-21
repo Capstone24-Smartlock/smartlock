@@ -125,9 +125,9 @@ class Alarm {
       Event.log(2, Camera.snap())
 
       Alarm.#interval = setInterval(async function() {
-        Electronics.beeper.write(1)
+        Electronics.beeper.writeSync(1)
         await sleep(1000)
-        Electronics.beeper.write(0)
+        Electronics.beeper.writeSync(0)
         await sleep(100)
       }, 1100)
 
@@ -136,7 +136,7 @@ class Alarm {
       Alarm.timer = 0
       Alarm.timerList = [0]
       clearInterval(Alarm.#interval)
-      Electronics.beeper.write(0)
+      Electronics.beeper.writeSync(0)
     }
 
     Alarm.#on = val
@@ -313,5 +313,5 @@ app.post("^/$|/index(.html)?", function(req, res) {
 
 //Turns off beeper in case of program termination (currently unfunctional)
 process.on("exit", function() {
-  Electronics.beeper.write(0)
+  Electronics.beeper.writeSync(0)
 })
