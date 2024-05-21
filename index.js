@@ -169,7 +169,7 @@ setInterval(function() {
 //Manages Event logging. Everytime an action is made with the lock, the event logger will store the data in a json file.
 class Event {
   static connection = mysql.createConnection({
-    host: "localhost",
+    host: "127.0.0.1",
     user: "dylan",
     password: "capstone24",
     database: "smartlock_log",
