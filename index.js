@@ -259,7 +259,7 @@ app.get("/activateAlarm", function(req, res) {
   res.send("Success")
 })
 
-app.get("lock", function(req, res) {
+app.get("/lock", function(req, res) {
   Lock.locked = true
   res.send("Success")
 })
