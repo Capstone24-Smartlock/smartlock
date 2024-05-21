@@ -281,6 +281,7 @@ const buttonSocket = new WebSocketAPI()
 
 //Event listener for buttons to lock the lock, activate the alarm, and send WebSocket requests.
 Electronics.button.watch(function(err, val) {
+  console.log(val)
   if (val == 0 && !Lock.locked) {
     Lock.locked = true
     buttonSocket.send("lock")
