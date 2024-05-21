@@ -215,13 +215,17 @@ class Battery {
   }
 
   static async data() {
-    if (await Battery.properties("get battery") === null) {
-      return null
-    }
     return {
-      level: parseFloat(await Battery.properties("get battery"))/100,
-      isCharging: (await Battery.properties("get battery_power_plugged")).valueOf() === "true".valueOf(),
+      level: 1,
+      isCharging: false,
     }
+    // if (await Battery.properties("get battery") === null) {
+    //   return null
+    // }
+    // return {
+    //   level: parseFloat(await Battery.properties("get battery"))/100,
+    //   isCharging: (await Battery.properties("get battery_power_plugged")).valueOf() === "true".valueOf(),
+    // }
   }
 }
 
