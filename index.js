@@ -256,11 +256,13 @@ app.get("/data", function(req, res) {
 
 app.get("/activateAlarm", function(req, res) {
   Alarm.on = true
+  buttonSocket.send("alarm")
   res.send("Success")
 })
 
 app.get("/lock", function(req, res) {
   Lock.locked = true
+  buttonSocket.send("lock")
   res.send("Success")
 })
 
