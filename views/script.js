@@ -198,6 +198,10 @@ async function getData() {
     Alarm.on = data.alarmOn
 }
 
+async function activateAlarm() {
+    await fetch("/activateAlarm")
+}
+
 window.addEventListener("load", function() {
     getData()
     Battery.update()

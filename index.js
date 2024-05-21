@@ -254,6 +254,11 @@ app.get("/data", function(req, res) {
   }))
 })
 
+app.get("/activateAlarm", function(req, res) {
+  Alarm.on = true
+  res.send("Success")
+})
+
 app.get("/log(.html)?", function(req, res) {
   res.sendFile(path.join(__dirname, "/views/log/log.html"))
 })
