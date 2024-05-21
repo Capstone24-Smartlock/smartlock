@@ -10,7 +10,7 @@ const { Socket } = require("dgram")
 const app = express()
 const WebSocket = require("ws")
 const libcamera = require("libcamera").libcamera
-const mysql = require("mysql")
+const mysql = require("mysql2")
 
 const port = 8080
 
