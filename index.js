@@ -254,6 +254,8 @@ app.get("/data", function(req, res) {
   }))
 })
 
+const buttonSocket = new WebSocketAPI()
+
 app.get("/activateAlarm", function(req, res) {
   Alarm.on = true
   buttonSocket.send("alarm")
@@ -289,7 +291,7 @@ app.get("/battery", async function(req, res) {
 })
 
 //Creates a WebSocketAPI that will send messages when certain button presses occur.
-const buttonSocket = new WebSocketAPI()
+
 
 //Event listener for buttons to lock the lock, activate the alarm, and send WebSocket requests.
 Electronics.button.watch(function(err, val) {
