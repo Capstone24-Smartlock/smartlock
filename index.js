@@ -173,7 +173,7 @@ class Event {
     user: "dylan",
     password: "capstone24",
     database: "smartlock_log",
-    port: '/var/run/mysqld/mysqld.sock',
+    port: 3306,
   })
 
   static async log(event, image=null, date=new Date()) {
