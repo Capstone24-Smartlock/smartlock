@@ -1,7 +1,7 @@
 //Battery HTTP port: 8421
 //Imports all the required packages for this project.
 const pwm = require("raspi-soft-pwm")
-const gpio = require("raspi-gpio")
+const Gpio = require("onoff").Gpio
 const fs = require("fs")
 const path = require("path")
 const net = require("net")
@@ -44,25 +44,22 @@ class WebSocketAPI {
 //This class defines all the basic electronic compontents so they are easier to control and manage.
 class Electronics {
   static motor = new pwm.SoftPWM(5)
-  static beeper = new gpio.DigitalOutput(1)
-  static button = new gpio.DigitalInput({
-    pin: 26,
-    pullResistor: gpio.PULL_UP,
-  })
+  static beeper = new Gpio(1, "out")
+  static button = new Gpio(26, "in", "both")
 
   //This method defines the 2 quick beeps the beepers does when the lock is unlocked.
   static async beep() {
     for (let i = 0; i < 2; i++) {
-      Electronics.beeper.write(1)
+      Electronics.beeper.writeSync(1)
       await sleep(100)
-      Electronics.beeper.write(0)
+      Electronics.beeper.writeSync(0)
       await sleep(100)
     }
   }
 }
 
 //Makes sure the beeper is off when the program starts.
-Electronics.beeper.write(0)
+Electronics.beeper.writeSync(0)
 
 //This class defines all the methods and attrivutes used to control the locking and unlocking mechanisms of the lock.
 class Lock {
@@ -279,7 +276,7 @@ app.get("/battery", async function(req, res) {
 const buttonSocket = new WebSocketAPI()
 
 //Event listener for buttons to lock the lock, activate the alarm, and send WebSocket requests.
-Electronics.button.on("change", function(val) {
+Electronics.button.watch(function(err, val) {
   if (val == 0 && !Lock.locked) {
     Lock.locked = true
     buttonSocket.send("lock")
