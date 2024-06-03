@@ -61,7 +61,7 @@ class Electronics {
 //Makes sure the beeper is off when the program starts.
 Electronics.beeper.writeSync(0)
 
-//This class defines all the methods and attrivutes used to control the locking and unlocking mechanisms of the lock.
+//This class defines all the methods and attributes used to control the locking and unlocking mechanisms of the lock.
 class Lock {
   static #locked = true
   //Defines the PWM duty cycles the servo is calibrated in order to move to the correct position when opening and closing.
@@ -166,7 +166,7 @@ setInterval(function() {
   }
 }, 10)
 
-//Manages Event logging. Everytime an action is made with the lock, the event logger will store the data in a json file.
+//Manages Event logging. Everytime an action is made with the lock, the event logger will store the data in a mysql database on the smartlock.
 class Event {
   static connection = mysql.createConnection({
     host: "127.0.0.1",
@@ -215,17 +215,13 @@ class Battery {
   }
 
   static async data() {
-    return {
-      level: 1,
-      isCharging: false,
+    if (await Battery.properties("get battery") === null) {
+      return null
     }
-    // if (await Battery.properties("get battery") === null) {
-    //   return null
-    // }
-    // return {
-    //   level: parseFloat(await Battery.properties("get battery"))/100,
-    //   isCharging: (await Battery.properties("get battery_power_plugged")).valueOf() === "true".valueOf(),
-    // }
+    return {
+      level: parseFloat(await Battery.properties("get battery"))/100,
+      isCharging: (await Battery.properties("get battery_power_plugged")).valueOf() === "true".valueOf(),
+    }
   }
 }
 
